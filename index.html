@@ -319,6 +319,21 @@ function init(){
   };
   S.viewers[MY] = 7; S.going[MY] = 3;
 }
+/* 보던 화면 기억: mode, tab, otab, screen, target만 sessionStorage에 저장 (새로고침 후 복원, 탭을 닫으면 사라짐) */
+const VIEW_KEY = "dplog.view";
+const VIEW_OK = {mode:["student","owner"], tab:["map","pick","notif"], otab:["live","report","opick"], screen:[null,"detail","review","done"]};
+function saveView(){
+  try{ sessionStorage.setItem(VIEW_KEY, JSON.stringify({mode:S.mode, tab:S.tab, otab:S.otab, screen:S.screen, target:S.target})); }catch(e){}
+}
+function restoreView(){
+  let v; try{ v = JSON.parse(sessionStorage.getItem(VIEW_KEY)); }catch(e){}
+  if(!v || typeof v !== "object") return;
+  for(const k in VIEW_OK) if(VIEW_OK[k].includes(v[k])) S[k] = v[k];
+  if(MENUS.some(m => m.id === v.target)) S.target = v.target;
+  /* 작성 내용·인증 기록은 저장하지 않으므로: 리뷰 화면은 인증된 상태로 다시 열고, 전달 완료 화면은 메뉴 상세로 돌림 */
+  if(S.screen === "review") S.verified[S.target] = true;
+  if(S.screen === "done") S.screen = "detail";
+}
 const $ = s => document.querySelector(s);
 const menu = id => MENUS.find(m => m.id === id);
 const won = n => n == null ? "가격 확인 중" : n.toLocaleString("ko-KR") + "원";
@@ -602,6 +617,7 @@ function render(){
   $("#app").innerHTML = body + `<nav class="nav">${nav}</nav>`;
   document.querySelectorAll('[data-act="mode"]').forEach(b=>b.setAttribute("aria-pressed", b.dataset.v===S.mode));
   syncMap();
+  saveView();
 }
 
 function verify(){
@@ -671,7 +687,7 @@ setInterval(()=>{
   document.querySelectorAll("[data-views]").forEach(el=>el.textContent=S.views);
 }, 2500);
 
-init(); render();
+init(); restoreView(); render();
 </script>
 </body>
 </html>
