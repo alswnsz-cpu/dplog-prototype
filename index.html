@@ -1159,6 +1159,37 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .stepper li.now .stn4{border-color:var(--brand);color:var(--brand-dark)}
 .stepper b{font-size:14px;line-height:1.35}
 .stepper li.todo b{color:var(--muted)}
+
+/* ---- v5.6: 사장님 화면(청록 그라데이션 카드·막대) · 발표 근거 ---- */
+.livecard{background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:var(--white);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:4px}
+.livecard small{font-size:13px;opacity:.9}
+.livecard .num{font-size:64px;line-height:1.05;font-weight:800;font-variant-numeric:tabular-nums}
+.livecard p{font-size:12px;opacity:.85}
+.mrow{display:flex;align-items:center;gap:10px}
+.mrow .mn{width:84px;font-size:13px;flex:none}
+.mrow .bar{flex:1;margin:0;height:10px}
+.mrow .bar i{background:var(--brand);transition:width .5s}
+.mrow b{width:26px;text-align:right;font-variant-numeric:tabular-nums}
+.hrs{display:flex;align-items:flex-end;gap:8px;height:120px;border-bottom:1px solid var(--line);padding-top:16px}
+.hcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.hcol i{display:block;width:100%;background:var(--brand-soft);border-radius:5px 5px 0 0;transition:height .5s}
+.hcol.peak i{background:var(--brand-dark)}
+.hcol.peak{color:var(--ink);font-weight:700}
+.rptcard .rtitle{font-size:15px;line-height:1.35}
+.rptcard .tip{font-size:13px;color:var(--ink)}
+.sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sum3 .stat{background:var(--mint);border-color:var(--mint-line)}
+.sum3 .stat span{color:var(--brand-dark)}
+
+/* 가이드: 접을 수 있는 발표 근거 · 비교 카드 */
+.guide details{background:rgba(var(--white-rgb),.08);border-radius:12px;padding:0 12px;color:var(--white)}
+.guide summary{min-height:44px;display:flex;align-items:center;font-weight:700;font-size:13.5px;cursor:pointer}
+.guide details[open]{padding-bottom:12px}
+.guide details p,.guide details li{font-size:12px;line-height:1.5}
+.guide details ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.guide details li b{display:block;font-size:12.5px}
+.guide details li span{opacity:.85}
+.guide details li.me{background:rgba(var(--white-rgb),.14);border-radius:8px;padding:6px 8px}
 </style>
 </head>
 <body>
@@ -1190,6 +1221,18 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
       <li><i style="background:var(--gray-bg);border-color:var(--gray)"></i><span><b>정보 수집 중</b> 가게 위치만 실제</span></li>
       <li><i style="background:var(--accent-bg);border-color:var(--accent)"></i><span><b>시연용 예시</b> 사장님 화면·점수·실시간 숫자</span></li>
     </ul>
+    <details class="evid"><summary>발표 근거</summary>
+      <p>ref 캡처가 없어 설문 수치는 넣지 않았어요. 확인된 수치만 출처와 함께 채워 넣어요.</p>
+      <ul>
+        <li><b>학생 설문 (2026.11)</b><span>응답 수 · 결과: — (입력 대기)</span></li>
+        <li><b>점주 설문</b><span>응답 수 · 결과: — (입력 대기)</span></li>
+      </ul></details>
+    <details class="evid"><summary>기존 앱과 다른 점</summary>
+      <ul>
+        <li><b>네이버·카카오 지도</b><span>검색어 → 가게 이름 핀, 위쪽은 광고</span></li>
+        <li><b>배민·쿠팡이츠</b><span>가게 이름 + 배달 중심</span></li>
+        <li class="me"><b>D-PLOG 메뉴 핀</b><span>음식 핀, 공강·도보·가격 기준, 광고와 분리</span></li>
+      </ul></details>
     <p class="note">가게 위치와 이름은 실제(지도 기준)예요. 재료·알레르기·맵기는 일반 조리법 기준 참고값이고, 점수·혼잡도·사장님 화면의 숫자는 모두 시연용 예시예요.</p>
   </aside>
 
@@ -1383,6 +1426,7 @@ const STORES = [
 const DEMO = {id:"demo", store:"예시 가게", lat:35.1372, lng:129.1006, cat:"noodle", src:"demo", demo:true,
   note:"시연용 가상 가게예요. 실제 가게가 아니에요",
   items:[
+    {e:"🍱", price:9000, spicy:0, extra:"곱빼기 +2,000원 (시연용 예시)", ing:["pork","wheat","egg","soy"], raw:"돼지 등심 · 빵가루 · 달걀 · 소스", name:nm("등심 돈가스","Pork Cutlet","炸猪排","Cốt lết heo","पोर्क कटलेट")},
     {e:"🍜", price:8000, spicy:0, extra:"곱빼기 +1,000원 (시연용 예시)", ing:["wheat","shellfish"], raw:"밀가루 면 · 바지락 · 애호박 · 대파", name:nm("칼국수","Knife-cut noodle soup","刀切面","Mì cắt tay","हातले काटेको नुडल सुप")},
     {e:"🥣", price:8000, spicy:0, extra:"곱빼기 +1,000원 (시연용 예시)", ing:["wheat","shellfish"], raw:"밀가루 반죽 · 바지락 · 감자 · 애호박", name:nm("수제비","Hand-pulled dough soup","手撕面片汤","Súp bột kéo tay","हातले च्यातेको पिठो सुप")}]};
 /* 업종 기준 참고값: 사장님 확인 전이라 화면에는 ‘업종 기준 참고’로 표시돼요 (null = 확인 중) */
@@ -1411,8 +1455,8 @@ ALL.forEach(s => { s.walk = mins(dist(STATION, s)); });
 const total = s => 5 + s.walk*2 + EAT[s.cat];     // 탐색 5분 + 왕복 도보 + 식사(예상)
 
 /* ---------- 상태 ---------- */
-const SV = 7;
-const KEY = "dplog-v7", INTRO_KEY = "dplog-intro-v6";
+const SV = 8;
+const KEY = "dplog-v8", INTRO_KEY = "dplog-intro-v6";
 /* 저장소: sessionStorage가 막혀 있어도(시크릿·인앱 브라우저) 메모리로 대체해서 정상 동작해요 */
 const MEM = {};
 const ST = {
@@ -1427,9 +1471,9 @@ function fresh(){
     cat:"all", safe:false, gap:60, f:{walk:false,solo:false,budget:false,takeout:false}, saved:[], btab:"pick", sel:"hakone", target:"hakone", dish:{}, lang:"ko", myAllergy:["pork"],
     navTo:{}, verified:{}, written:{}, fbSel:[], fbMode:"secret", fbDraft:{public:"",secret:""}, sent:null,
     course:{meal:false,sweet:false}, stamps:0, linked:false,
-    fbs:[["1인분 양"],["대기 시간","1인분 양"]], applied:null, voted:null,
+    fbs:[["포장 대기 위치"],["포장 대기 위치","1인분 양"],["1인분 양"],["포장 대기 위치"],["1인분 양"],["포장 대기 위치"],["대기 시간"]], applied:null, appliedTags:[], voted:null,
     reviews:[], coupons:[], unread:0,
-    notifs:[{t:"예시 가게가 개선했어요", d:"칼국수 양: 곱빼기 가격을 메뉴판에 나눠 적었어요 (시연용 예시)", read:true}],
+    notifs:[{t:"예시 가게가 개선했어요", d:"1인분 양: 곱빼기 가격을 메뉴판에 나눠 적었어요 (시연용 예시)", read:true}],
     viewers:{demo:7}, going:{demo:3}, sub:5, views:214,
     scores:{"예시 분식집":91,"예시 돈가스집":86,"예시 디저트집":83,"예시 가게":78,"예시 찌개집":68,"예시 비빔밥집":61}
   };
@@ -1474,6 +1518,7 @@ function sanitize(raw){
   pick("linked", bool);
   pick("fbs", v => Array.isArray(v) && v.every(x => strArr(x) && x.length > 0 && x.every(t => !!AI_TIP[t])));
   pick("applied", v => v === null || (str(v) && !!AI_TIP[v]));
+  pick("appliedTags", v => strArr(v) && v.every(k => !!AI_TIP[k]));
   pick("voted", v => v === null || oneOf(ids)(v));
   pick("reviews", v => Array.isArray(v) && v.every(r => isObj(r) && str(r.id) && str(r.text)));
   pick("coupons", v => Array.isArray(v) && v.every(c => isObj(c) && str(c.s) && str(c.d)));
@@ -1487,6 +1532,7 @@ function sanitize(raw){
   pick("scores", v => isObj(v) && Object.keys(dflt).every(k => num(v[k])));
   if(b.screen && !store(b.target)) b.screen = null;
   if(b.screen === "done" && !b.sent) b.screen = null;
+  if(b.applied && b.appliedTags.indexOf(b.applied) < 0) b.appliedTags.push(b.applied);
   return b;
 }
 function init(){
@@ -1973,47 +2019,58 @@ function vBenefit(){ return S.btab === "notif" ? vNotif() : vPick(); }
 
 /* ---------- 사장님 화면 (전부 ‘예시 가게’ 시연 데이터) ---------- */
 const EX = '<span class="exbadge">시연용 예시 데이터 · 실제 가게 아님</span>';
+const HR = [11,12,13,14,15,16], HR_BASE = [6,14,22,16,9,5];   // 시연용 예시 (13시가 피크)
+function liveVals(){ const a = S.viewers.demo, b = Math.ceil(S.sub * 0.6), c = Math.max(0, S.sub - b); return [a, b, c]; }
+function hourVals(){ const x = Math.max(0, S.views - 214); return HR_BASE.map((v, i) => i === 2 ? v + x : v); }
+function updateLive(){
+  const lv = liveVals(), lm = Math.max.apply(null, lv) || 1, hv = hourVals(), hm = Math.max.apply(null, hv) || 1, pk = hv.indexOf(hm);
+  document.querySelectorAll("[data-mbar]").forEach(el => { el.style.width = Math.round(lv[+el.dataset.mbar] / lm * 100) + "%"; });
+  document.querySelectorAll("[data-mval]").forEach(el => { el.textContent = lv[+el.dataset.mval]; });
+  document.querySelectorAll("[data-hbar]").forEach(el => { el.style.height = Math.round(hv[+el.dataset.hbar] / hm * 84) + "px"; });
+  document.querySelectorAll("[data-hval]").forEach(el => { el.textContent = hv[+el.dataset.hval]; });
+  document.querySelectorAll(".hcol").forEach((el, i) => el.classList.toggle("peak", i === pk));
+}
 function vLive(){
-  const week = [132,148,121,176,190,97,S.views], max = Math.max(...week);
+  const names = DEMO.items.map(it => koOf(it)), lv = liveVals(), lm = Math.max.apply(null, lv) || 1, hv = hourVals(), hm = Math.max.apply(null, hv) || 1, pk = hv.indexOf(hm);
   return `
-  <div class="top"><div><h2>${MYSTORE} 사장님</h2><p class="sub">실시간 반응 · 홍보 효과를 바로 확인해요</p></div>${EX}</div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${MYSTORE} 사장님</h2><span class="hsp"></span></div>${EX}</div>
   <div class="scroll">
-    <div class="big"><small>현재 내 가게 메뉴를</small><span class="num"><span data-total>${S.viewers.demo+S.sub}</span>명</span><p>이 보고 있습니다</p>
-      <div class="line"><span>칼국수</span><b><span data-live="demo">${S.viewers.demo}</span>명</b></div>
-      <div class="line"><span>수제비</span><b><span data-sub>${S.sub}</span>명</b></div>
-      <div class="line"><span>길 안내 시작 (가는 중)</span><b><span data-going="demo">${S.going.demo}</span>명</b></div>
-      <small>최근 30분 · 학교 단위 숫자만 · 개인 위치는 저장하지 않아요</small></div>
+    <div class="livecard"><small>지금 내 메뉴를 보는 학생 수</small><span class="num"><span data-total>${S.viewers.demo + S.sub}</span> 명</span><p>최근 30분 · 학교 단위 숫자만 · 개인 위치는 저장하지 않아요 (시연용 예시)</p></div>
+    <div class="card"><span class="eyebrow">많이 본 메뉴</span>
+      ${names.map((n, i) => `<div class="mrow"><span class="mn">${esc(n)}</span><div class="bar"><i data-mbar="${i}" style="width:${Math.round(lv[i] / lm * 100)}%"></i></div><b data-mval="${i}">${lv[i]}</b></div>`).join("")}</div>
+    <div class="card"><span class="eyebrow">오늘 반응</span>
+      <div class="hrs">${hv.map((v, i) => `<div class="hcol ${i === pk ? "peak" : ""}"><span data-hval="${i}">${v}</span><i data-hbar="${i}" style="height:${Math.round(v / hm * 84)}px"></i></div>`).join("")}</div>
+      <div class="days">${HR.map(h => `<span>${h}시</span>`).join("")}</div></div>
     <div class="stats">
       <div class="stat"><b data-views>${S.views}</b><span>오늘 핀 조회</span></div>
-      <div class="stat"><b>${38+(S.navTo.demo?1:0)}</b><span>오늘 길 안내</span></div>
-      <div class="stat"><b>${17+(S.verified.demo?1:0)}</b><span>방문 인증</span></div>
-    </div>
-    <div class="card"><span class="eyebrow">이번 주 핀 조회 수</span>
-      <div class="week">${week.map((v,i)=>`<div class="col ${i===6?"today":""}"><span ${i===6?"data-views":""}>${v}</span><i style="height:${Math.round(v/max*80)}px"></i></div>`).join("")}</div>
-      <div class="days">${["목","금","토","일","월","화","오늘"].map(d=>`<span>${d}</span>`).join("")}</div>
+      <div class="stat"><b>${38 + (S.navTo.demo ? 1 : 0)}</b><span>오늘 길 안내</span></div>
+      <div class="stat"><b>${17 + (S.verified.demo ? 1 : 0)}</b><span>방문 인증</span></div>
     </div>
   </div>`;
 }
+const RLABEL = {"포장 대기 위치":"포장 대기 위치 안내"};
 function vReport(){
-  const n = S.fbs.length, t = tally(), open = n>=3 && t.length>0;
+  const n = S.fbs.length, t = tally(), open = n >= 3 && t.length > 0, top = t.slice(0, 2);
+  const done = top.filter(([k]) => S.appliedTags.indexOf(k) >= 0).length;
   return `
-  <div class="top"><div><h2>11월 월간 리포트</h2><p class="sub">비밀 피드백 요약과 바로 해 볼 개선안</p></div>${EX}</div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>11월 피드백 요약</h2><span class="hsp"></span></div>${EX}</div>
   <div class="scroll">
-    <div class="card"><div class="row"><b>이번 달 비밀 피드백 ${n}건</b><span class="meta" style="margin-left:auto">${open?"요약 공개됨":"3건부터 요약 공개"}</span></div>
-      <div class="lock">${[0,1,2].map(i=>`<i class="${i<n?"on":""}"></i>`).join("")}</div>
-      ${open?"":`<p class="notice">작성자를 추측할 수 없도록 3건이 모일 때까지 내용을 잠가요. 학생 화면에서 ‘예시 가게’에 한 건을 더 보내 보세요.</p><button class="btn ghost" data-act="step" data-v="3">학생 화면에서 피드백 보내기</button>`}
+    ${open ? top.map(([k, c], i) => `<div class="card rptcard">
+        <b class="rtitle">${i + 1}. ${esc(RLABEL[k] || k)} · ${c}건</b>
+        <p class="tip">💡 개선 제안 · ${esc(AI_TIP[k])}</p>
+        ${S.appliedTags.indexOf(k) >= 0 ? `<div class="done">✔ ‘개선했어요’ 공개됨 · 의견 남긴 학생에게 알림 (예시)</div>` : `<button class="btn sm" data-act="apply" data-v="${esc(k)}">개선했어요 공개</button>`}</div>`).join("")
+      : `<div class="card"><div class="row"><b>이번 달 비밀 피드백 ${n}건</b><span class="meta" style="margin-left:auto">3건부터 요약 공개</span></div>
+      <div class="lock">${[0, 1, 2].map(i => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</div>
+      <p class="notice">작성자를 추측할 수 없도록 3건이 모일 때까지 내용을 잠가요. 학생 화면에서 ‘예시 가게’에 한 건을 더 보내 보세요.</p><button class="btn ghost" data-act="step" data-v="3">학생 화면에서 피드백 보내기</button></div>`}
+    <div class="sum3">
+      <div class="stat"><b>${done}/${Math.max(top.length, 2)}</b><span>반영</span></div>
+      <div class="stat"><b>${n}건</b><span>응답</span></div>
+      <div class="stat"><b>예시</b><span>지표 · 시연용</span></div>
     </div>
-    ${open ? `
-    <div class="card aicard"><span class="eyebrow">AI 요약</span>
-      <h3>가장 많이 나온 이야기는 ‘${t[0][0]}’이에요</h3>
-      ${t.map(([k,c])=>`<div class="tally"><span class="name">${k}</span><div class="bar"><i style="width:${Math.round(c/t[0][1]*100)}%"></i></div><span class="cnt">${c}건</span></div>`).join("")}
-      <p class="meta">원문과 작성자는 표시하지 않아요.</p>
-    </div>
-    <div class="card"><span class="eyebrow">아쉬운 점마다 바로 해 볼 개선안</span>
-      ${t.slice(0,3).map(([k])=>`<div class="fix"><b>${k}</b><p>${AI_TIP[k]}</p>
-        ${S.applied===k ? `<div class="done">‘개선했어요’ 카드 발송 · 의견 남긴 학생 ${n}명에게 알림 · 캠퍼스 픽 +${APPLY_BONUS}점</div>`
-          : S.applied ? "" : `<button class="btn sm" data-act="apply" data-v="${k}">고쳤어요, ‘개선했어요’ 보내기</button>`}</div>`).join("")}
-    </div>` : ""}
+    ${open ? `<div class="card aicard"><span class="eyebrow">AI 요약</span>
+      <h3>가장 많이 나온 이야기는 ‘${esc(t[0][0])}’이에요</h3>
+      ${t.map(([k, c]) => `<div class="tally"><span class="name">${esc(k)}</span><div class="bar"><i style="width:${Math.round(c / t[0][1] * 100)}%"></i></div><span class="cnt">${c}건</span></div>`).join("")}
+      <p class="meta">원문과 작성자는 표시하지 않아요.</p></div>` : ""}
     <p class="notice">다음 단계에서 추가할 내용: 상권 메뉴 수요 TOP 5, 개선 전후 반응 비교</p>
   </div>`;
 }
@@ -2180,9 +2237,10 @@ function demoSend(){
   S.coupons.push({s:"예시 가게", d:"두 번째 방문 · 500원 할인 (시연)"}); S.written.demo = true;
   S.sent = {good:true, secret:true}; S.fbDraft = {public:"", secret:""}; S.fbSel = []; S.screen = "done"; render();
 }
-function demoApply(){
-  if(!demo.on || demo.n !== 5 || S.applied) return;
-  ensureFbs(); ACT.apply(topTag()); render();
+function demoApply(i){
+  if(!demo.on || demo.n !== 5) return;
+  ensureFbs(); const t = tally(), k = t[i] && t[i][0];
+  if(k && S.appliedTags.indexOf(k) < 0){ ACT.apply(k); render(); }
 }
 function updateBar(){
   const bar = $("#demobar"); if(!bar) return;
@@ -2212,10 +2270,10 @@ function goStep(n){
   dClear(); demo.n = n; demo.on = true; demo.finished = false;
   try{
     if(n >= 5) ensureFbs();
-    if(n === 6 && !S.applied) ACT.apply(topTag());
+    if(n === 6 && !S.applied){ ensureFbs(); tally().slice(0, 2).forEach(function(x){ ACT.apply(x[0]); }); }
     ACT.step(n);
     if(n === 3) demo.timers.push(setTimeout(demoSend, 2600));
-    if(n === 5) demo.timers.push(setTimeout(demoApply, 2600));
+    if(n === 5){ demo.timers.push(setTimeout(function(){ demoApply(0); }, 1800)); demo.timers.push(setTimeout(function(){ demoApply(1); }, 3200)); }
   }catch(e){ recover("demo", e); return; }
   updateBar(); render(); armAdvance();
 }
@@ -2315,7 +2373,9 @@ const ACT = {
     }
     S.fbDraft = {public:"", secret:""}; S.fbSel = [];
     S.coupons.push({s:s.short||s.store, d:"두 번째 방문 · 500원 할인 (시연)"}); S.written[s.id] = true; S.screen = "done"; },
-  apply(v){ S.applied=v; S.scores[MYSTORE]+=APPLY_BONUS;
+  apply(v){ if(!AI_TIP[v] || S.appliedTags.indexOf(v) >= 0) return false;
+    if(!S.applied) S.scores[MYSTORE] += APPLY_BONUS;
+    S.appliedTags.push(v); S.applied = v;
     S.notifs.unshift({t:`${MYSTORE}가 개선했어요`, d:`${v}: ${AI_TIP[v]} (시연용 예시)`, read:false}); S.unread++;
     toast("의견을 남긴 학생에게 ‘개선했어요’ 알림을 보냈어요."); },
   vote(v){ if(S.voted) return false; S.voted=v; toast(`${store(v).short||store(v).store}를 이번 달 캠퍼스 픽으로 추천했어요. 집계는 월말에 해요.`); },
@@ -2363,6 +2423,7 @@ setInterval(()=>{
   document.querySelectorAll("[data-sub]").forEach(el=>el.textContent=S.sub);
   document.querySelectorAll("[data-total]").forEach(el=>el.textContent=S.viewers.demo+S.sub);
   document.querySelectorAll("[data-views]").forEach(el=>el.textContent=S.views);
+  updateLive();
 }, 2500);
 
 init(); render();
