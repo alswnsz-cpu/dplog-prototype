@@ -1067,6 +1067,78 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .fbc .fb-ring{fill:rgba(var(--brand-rgb),.05);stroke:var(--brand)}
 .fbc .fb-ring-t{fill:var(--brand)}
 .fbc .fb-station{fill:var(--brand);stroke:var(--white)}
+
+/* ---- v5.4: 학생 화면(메뉴 카드·지도 핀·시트·탭 4개) ---- */
+.hdr{display:flex;align-items:center;gap:4px}
+.hdr h2{flex:1;text-align:center;font-size:20px;line-height:1.2}
+.hbtn{min-width:44px;min-height:44px;padding:0 6px;font-size:14px;font-weight:700;color:var(--brand)}
+.hsp{min-width:44px}
+.locrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.loc{min-height:44px;font-size:13px;font-weight:700;color:var(--ink);text-align:left}
+.gappill{min-height:44px;padding:0 14px;border-radius:99px;background:var(--mint);color:var(--brand-dark);border:1px solid var(--mint-line);font-size:13px;font-weight:700;white-space:nowrap}
+.chip[aria-pressed="true"],.chip.cond[aria-pressed="true"]{background:var(--brand-dark);border-color:var(--brand-dark);color:var(--white)}
+.cbanner{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 14px;background:var(--mint);color:var(--brand-dark);border-top:1px solid var(--mint-line);font-size:13px;font-weight:700;text-align:left}
+.cbanner span:last-child{flex:1;min-width:0}
+
+/* 지도 핀: 음식 이름 + 가격, 선택되면 진한 청록 + 🔥 */
+.pin .lbl{display:flex;flex-direction:column;align-items:center;line-height:1.25;padding:1px 6px}
+.pin .lbl b{font-size:11px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.pin .lbl em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--price)}
+.pin[aria-pressed="true"]{z-index:9}
+.pin[aria-pressed="true"] .bub{background:var(--brand-dark);border-color:var(--brand-dark);transform:scale(1.3)}
+.pin[aria-pressed="true"] .lbl{background:var(--brand-dark);color:var(--white)}
+.pin[aria-pressed="true"] .lbl em{color:var(--white)}
+
+/* 상세 카드 */
+.hero{position:relative;height:132px;border-radius:16px;background:linear-gradient(135deg,var(--mint),var(--brand-soft));display:grid;place-items:center;flex:none}
+.herotile{width:84px;height:84px;border-radius:22px;background:var(--white);display:grid;place-items:center;font-size:46px;box-shadow:0 4px 12px rgba(var(--ink-rgb),.15)}
+.herobadge{position:absolute;left:10px;top:10px;background:var(--white);color:var(--good);font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:99px}
+.dhead h2{font-size:22px;line-height:1.25}
+.dhead .sub{font-size:12.5px;color:var(--muted)}
+.bigprice{font-size:28px;line-height:1.2;font-weight:800;color:var(--price);font-variant-numeric:tabular-nums;margin-top:4px}
+.extra{font-size:12.5px;color:var(--muted)}
+.tiles4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.itile{background:var(--mint);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-height:68px;overflow-wrap:anywhere}
+.itile i{font-style:normal;font-size:20px;line-height:1.2}
+.itile .il{font-size:11.5px;color:var(--muted)}
+.itile b{font-size:13px;line-height:1.35}
+.itile.unk{background:var(--gray-bg);color:var(--gray-ink)}
+.itile.unk .il{color:var(--gray-ink)}
+.actbar{position:sticky;bottom:-20px;display:flex;gap:8px;margin:4px -16px -20px;padding:10px 16px;background:var(--card);border-top:1px solid var(--line);z-index:3}
+.actbar .btn{flex:1}
+.top > .back{align-self:flex-start}
+
+/* 저장 목록 */
+.svrow{flex-direction:row;align-items:center;gap:12px}
+.svbody{flex:1;min-width:0}
+.svbody b{display:block;font-size:14.5px}
+.svbody .price{margin-left:0;font-size:14px}
+.svbtns{display:flex;flex-direction:column;gap:6px;flex:none}
+.svbtns .btn{min-height:44px;padding:8px 10px;font-size:12.5px}
+
+/* 낮은 화면: 지도 영역을 지키려고 덜 중요한 줄을 접어요 */
+@media (max-height:780px){ .top .locrow .loc{min-height:36px} }
+@media (max-height:760px){ .demoline{display:none} }
+@media (max-height:700px){ .cbanner{display:none} .hero{height:100px} .top .hdr .hbtn{min-height:40px} }
+
+/* ---- v5.4 높이 보정: 머리글이 길어진 만큼 여백을 줄이고, 낮은 화면에서는 덜 중요한 줄을 접어요 ---- */
+.map{min-height:120px}
+.top{padding:8px 16px 6px;gap:4px}
+.sheet{padding:10px 16px 12px;gap:8px}
+.sheet .tags .tag:last-child{display:none}
+@media (max-height:860px){ .demoline{display:none} }
+@media (max-height:780px){ .cbanner{display:none} }
+@media (max-height:700px){ .sheet > .chips{display:none} }
+
+/* ---- v5.4: 가로 모드(낮고 넓은 화면)에서는 지도를 오른쪽에 크게 ---- */
+@media (max-height:520px) and (orientation:landscape){
+  #app.is-map{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+  #app.is-map .top{grid-column:1;grid-row:1}
+  #app.is-map .map{grid-column:2;grid-row:1 / span 2;height:auto;min-height:0}
+  #app.is-map .sheet{grid-column:1;grid-row:2;min-height:0;overflow-y:auto}
+  #app.is-map .cbanner{display:none}
+  #app.is-map .nav{grid-column:1 / span 2;grid-row:3;position:static}
+}
 </style>
 </head>
 <body>
@@ -1291,8 +1363,12 @@ const STORES = [
 const DEMO = {id:"demo", store:"예시 가게", lat:35.1372, lng:129.1006, cat:"noodle", src:"demo", demo:true,
   note:"시연용 가상 가게예요. 실제 가게가 아니에요",
   items:[
-    {e:"🍜", price:8000, spicy:0, ing:["wheat","shellfish"], raw:"밀가루 면 · 바지락 · 애호박 · 대파", name:nm("칼국수","Knife-cut noodle soup","刀切面","Mì cắt tay","हातले काटेको नुडल सुप")},
-    {e:"🥣", price:8000, spicy:0, ing:["wheat","shellfish"], raw:"밀가루 반죽 · 바지락 · 감자 · 애호박", name:nm("수제비","Hand-pulled dough soup","手撕面片汤","Súp bột kéo tay","हातले च्यातेको पिठो सुप")}]};
+    {e:"🍜", price:8000, spicy:0, extra:"곱빼기 +1,000원 (시연용 예시)", ing:["wheat","shellfish"], raw:"밀가루 면 · 바지락 · 애호박 · 대파", name:nm("칼국수","Knife-cut noodle soup","刀切面","Mì cắt tay","हातले काटेको नुडल सुप")},
+    {e:"🥣", price:8000, spicy:0, extra:"곱빼기 +1,000원 (시연용 예시)", ing:["wheat","shellfish"], raw:"밀가루 반죽 · 바지락 · 감자 · 애호박", name:nm("수제비","Hand-pulled dough soup","手撕面片汤","Súp bột kéo tay","हातले च्यातेको पिठो सुप")}]};
+/* 업종 기준 참고값: 사장님 확인 전이라 화면에는 ‘업종 기준 참고’로 표시돼요 (null = 확인 중) */
+const FLAGS = {hyeong:{solo:true}, joseon:{solo:true}, genroku:{solo:true}, hakone:{solo:true, hours:"일요일 휴무 (후기 기준)"}, myeonsik:{solo:true}, sumi:{solo:true}, ppalbong:{solo:true, takeout:true}, mima:{solo:true, takeout:true}, sulbing:{takeout:true}, rollpang:{solo:true, takeout:true}};
+STORES.forEach(s => { const f = FLAGS[s.id] || {}; s.solo = f.solo === true ? true : null; s.takeout = f.takeout === true ? true : null; s.hours = f.hours || null; });
+Object.assign(DEMO, {solo:true, takeout:true, hours:"11:00–21:00 (시연용 예시)"});
 const ALL = [...STORES, DEMO];
 const MYSTORE = "예시 가게";
 const MY = "demo";
@@ -1316,8 +1392,8 @@ ALL.forEach(s => { s.walk = mins(dist(STATION, s)); });
 const total = s => 5 + s.walk*2 + EAT[s.cat];     // 탐색 5분 + 왕복 도보 + 식사(예상)
 
 /* ---------- 상태 ---------- */
-const SV = 5;
-const KEY = "dplog-v5", INTRO_KEY = "dplog-intro-v5";
+const SV = 6;
+const KEY = "dplog-v6", INTRO_KEY = "dplog-intro-v6";
 /* 저장소: sessionStorage가 막혀 있어도(시크릿·인앱 브라우저) 메모리로 대체해서 정상 동작해요 */
 const MEM = {};
 const ST = {
@@ -1329,7 +1405,7 @@ let S;
 function fresh(){
   return {
     mode:"student", tab:"map", otab:"live", screen:null,
-    cat:"all", safe:false, gap:0, sel:"hakone", target:"hakone", dish:{}, lang:"ko", myAllergy:["pork"],
+    cat:"all", safe:false, gap:60, f:{walk:false,solo:false,budget:false,takeout:false}, saved:[], btab:"pick", sel:"hakone", target:"hakone", dish:{}, lang:"ko", myAllergy:["pork"],
     navTo:{}, verified:{}, written:{}, fbSel:[], sent:null,
     course:{meal:false,sweet:false}, stamps:0, linked:false,
     fbs:[["양"],["대기 시간","양"]], applied:null, voted:null,
@@ -1353,12 +1429,15 @@ function sanitize(raw){
   const ids = ALL.map(x => x.id);
   const pick = (k, ok) => { if(Object.prototype.hasOwnProperty.call(raw,k) && ok(raw[k])) b[k] = raw[k]; };
   pick("mode", oneOf(["student","owner"]));
-  pick("tab", oneOf(["map","pick","notif"]));
+  pick("tab", oneOf(["map","saved","benefit","my"]));
   pick("otab", oneOf(["live","report","opick"]));
   pick("screen", v => v === null || oneOf(["detail","review","done"])(v));
   pick("cat", oneOf(CATS.map(c => c[0])));
   pick("safe", bool);
-  pick("gap", oneOf([0,40,60]));
+  pick("f", v => isObj(v) && ["walk","solo","budget","takeout"].every(k => bool(v[k])));
+  pick("saved", v => strArr(v) && v.every(x => ids.indexOf(x) >= 0));
+  pick("btab", oneOf(["pick","notif"]));
+  pick("gap", oneOf([30,60,90]));
   pick("sel", oneOf(ids));
   pick("target", oneOf(ids));
   pick("dish", objOf(num));
@@ -1407,18 +1486,82 @@ function ranking(){ return Object.entries(S.scores).sort((a,b)=>b[1]-a[1]); }
 /* ---------- 메뉴/알레르기 도우미 ---------- */
 const hits = it => it ? (it.ing || []).filter(k => S.myAllergy.indexOf(k) >= 0) : [];
 const safeIdx = s => { const i = s.items.findIndex(it => !hits(it).length); return i < 0 ? 0 : i; };
-const curDish = s => s.items.length ? (s.items[S.dish[s.id] !== undefined ? S.dish[s.id] : safeIdx(s)] || s.items[0]) : null;
+const curDish = s => s.items.length ? (s.items[S.dish[s.id] !== undefined ? S.dish[s.id] : defIdx(s)] || s.items[0]) : null;
 const sure = s => s.src==="demo" || s.src==="owner";
 const koOf = it => (it && it.name && it.name.ko) || "메뉴 이름 확인 중";
 const nameOf = (it,L) => (it && it.name && (it.name[L] || it.name.en || it.name.ko)) || "메뉴 이름 확인 중";
 const spOf = it => Math.max(0, Math.min(3, Math.floor(+(it && it.spicy)) || 0));
 const priceOf = (it,s) => it && typeof it.price === "number" && isFinite(it.price) && it.price > 0 ? won(it.price) + (s && !s.demo && s.src!=="owner" ? " · 참고가" : "") : "가격 확인 중";
 
+/* ---------- v5.4: 새 문구(5개 언어) · 번역이 없는 문구는 ko로 대신해요 ---------- */
+const I18N = {
+  tab_near:{ko:"주변",en:"Nearby",zh:"附近",vi:"Gần đây",ne:"नजिक"},
+  tab_saved:{ko:"저장",en:"Saved",zh:"收藏",vi:"Đã lưu",ne:"सेभ"},
+  tab_perks:{ko:"혜택",en:"Perks",zh:"福利",vi:"Ưu đãi",ne:"सुविधा"},
+  tab_my:{ko:"마이",en:"My",zh:"我的",vi:"Của tôi",ne:"मेरो"},
+  title:{ko:"오늘 뭐 먹지?",en:"What to eat today?",zh:"今天吃什么?",vi:"Hôm nay ăn gì?",ne:"आज के खाने?"},
+  back:{ko:"‹ 뒤로",en:"‹ Back",zh:"‹ 返回",vi:"‹ Quay lại",ne:"‹ पछाडि"},
+  loc:{ko:"경성대·부경대 앞",en:"Near KSU·PKNU",zh:"庆星大·釜庆大前",vi:"Gần KSU·PKNU",ne:"KSU·PKNU नजिक"},
+  gap:{ko:"공강",en:"Free time",zh:"空档",vi:"Tiết trống",ne:"खाली समय"},
+  min:{ko:"분",en:" min",zh:"分钟",vi:" phút",ne:" मिनेट"},
+  f_walk:{ko:"도보 5분",en:"5 min walk",zh:"步行5分钟",vi:"Đi bộ 5 phút",ne:"५ मिनेट हिँडाइ"},
+  f_solo:{ko:"혼밥",en:"Solo",zh:"一人食",vi:"Ăn một mình",ne:"एक्लै"},
+  f_budget:{ko:"1만원 이하",en:"Under ₩10,000",zh:"1万韩元以下",vi:"Dưới 10.000₩",ne:"₩१०,००० भन्दा कम"},
+  f_take:{ko:"포장 가능",en:"Takeout",zh:"可打包",vi:"Mang đi",ne:"टेकआउट"},
+  f_safe:{ko:"내 알레르기 제외",en:"Skip my allergens",zh:"排除我的过敏原",vi:"Loại trừ dị ứng",ne:"मेरो एलर्जी हटाउनुहोस्"},
+  route:{ko:"길찾기",en:"Directions",zh:"导航",vi:"Chỉ đường",ne:"बाटो"},
+  save:{ko:"♡ 저장",en:"♡ Save",zh:"♡ 收藏",vi:"♡ Lưu",ne:"♡ सेभ"},
+  saved_on:{ko:"♥ 저장됨",en:"♥ Saved",zh:"♥ 已收藏",vi:"♥ Đã lưu",ne:"♥ सेभ भयो"},
+  detail:{ko:"상세 보기",en:"Details",zh:"详情",vi:"Chi tiết",ne:"विवरण"},
+  t_walk:{ko:"역에서 도보 {n}분",en:"{n} min walk from station",zh:"从站步行{n}分钟",vi:"Đi bộ {n} phút từ ga",ne:"स्टेसनबाट {n} मिनेट हिँडाइ"},
+  t_solo:{ko:"1인 주문",en:"Solo order",zh:"一人点餐",vi:"Gọi một suất",ne:"एक जनाको अर्डर"},
+  t_hours:{ko:"영업시간",en:"Hours",zh:"营业时间",vi:"Giờ mở cửa",ne:"खुल्ने समय"},
+  t_take:{ko:"포장 가능",en:"Takeout",zh:"可打包",vi:"Mang đi",ne:"टेकआउट"},
+  unk:{ko:"확인 중",en:"Checking",zh:"确认中",vi:"Đang kiểm tra",ne:"जाँच गर्दै"},
+  ref_yes:{ko:"가능 (업종 기준 참고)",en:"Likely (by business type)",zh:"可能(按业态参考)",vi:"Có thể (theo loại hình)",ne:"सम्भव (व्यवसाय प्रकार)"},
+  yes:{ko:"가능",en:"Yes",zh:"可以",vi:"Có",ne:"हुन्छ"},
+  my_title:{ko:"마이",en:"My",zh:"我的",vi:"Của tôi",ne:"मेरो"},
+  my_lang:{ko:"언어",en:"Language",zh:"语言",vi:"Ngôn ngữ",ne:"भाषा"},
+  my_al:{ko:"내 알레르기",en:"My allergies",zh:"我的过敏原",vi:"Dị ứng của tôi",ne:"मेरो एलर्जी"},
+  saved_title:{ko:"저장한 메뉴",en:"Saved menus",zh:"已收藏菜单",vi:"Món đã lưu",ne:"सेभ गरिएका मेनु"},
+  perks_title:{ko:"혜택",en:"Perks",zh:"福利",vi:"Ưu đãi",ne:"सुविधा"},
+  seg_pick:{ko:"캠퍼스 픽",en:"Campus Pick",zh:"校园精选",vi:"Campus Pick",ne:"क्याम्पस पिक"},
+  seg_coupon:{ko:"쿠폰·알림",en:"Coupons",zh:"优惠券·通知",vi:"Phiếu·Thông báo",ne:"कुपन"},
+  banner:{ko:"이번 주 신메뉴 · 두 번째 방문 쿠폰",en:"This week's new menu · 2nd-visit coupon"},
+  empty_saved:{ko:"아직 저장한 메뉴가 없어요. 메뉴 상세에서 [저장]을 누르면 여기에 모여요."},
+  empty_saved_btn:{ko:"지도에서 메뉴 찾기"}
+};
+const tr = k => { const e = I18N[k]; return e ? (e[S.lang] || e.ko) : k; };
+const trn = (k, n) => tr(k).replace("{n}", n);
+const isNum = v => typeof v === "number" && isFinite(v);
+/* 필터 (지도 핀과 목록이 같은 조건으로 걸러져요) */
+function passes(s){
+  if(S.cat !== "all" && s.cat !== S.cat) return false;
+  if(S.gap && total(s) > S.gap) return false;
+  if(S.safe && !s.items.some(it => !hits(it).length)) return false;
+  if(S.f.walk && s.walk > 5) return false;
+  if(S.f.solo && s.solo !== true) return false;
+  if(S.f.takeout && s.takeout !== true) return false;
+  if(S.f.budget && !s.items.some(it => isNum(it.price) && it.price <= 10000)) return false;
+  return true;
+}
+/* 1만원 이하를 켜면 그 가격대 메뉴를 먼저 보여 줘요 */
+const defIdx = s => {
+  let i = -1;
+  if(S.f.budget){
+    i = s.items.findIndex(it => isNum(it.price) && it.price <= 10000 && !hits(it).length);
+    if(i < 0) i = s.items.findIndex(it => isNum(it.price) && it.price <= 10000);
+  }
+  return i < 0 ? safeIdx(s) : i;
+};
+
 /* ---------- 지도 (Leaflet + OpenStreetMap, 못 불러오면 약식 지도) ---------- */
 function pinHTML(s){
-  const it = curDish(s), h = hits(it), label = it ? koOf(it) : (s.short||s.store);
-  return `<button class="pin ${s.src} ${h.length?"warnpin":""}" data-act="sel" data-v="${s.id}" aria-pressed="${S.sel===s.id}" aria-label="${esc(label)}, ${esc(s.store)}">
-    <span class="bub">${it?it.e:CE[s.cat]}${h.length?'<span class="wr">!</span>':""}</span><span class="lbl">${esc(label)}</span></button>`;
+  const it = curDish(s), h = hits(it), on = S.sel === s.id;
+  const label = it ? nameOf(it, S.lang) : (s.short || s.store);
+  const pr = it && isNum(it.price) ? won(it.price) : tr("unk");
+  return `<button class="pin ${s.src} ${h.length?"warnpin":""}" data-act="sel" data-v="${s.id}" aria-pressed="${on}" aria-label="${esc(label)} ${esc(pr)}, ${esc(s.store)}">
+    <span class="bub">${on?"🔥":(it?it.e:CE[s.cat])}${h.length?'<span class="wr">!</span>':""}</span><span class="lbl"><b>${esc(label)}</b><em>${esc(pr)}</em></span></button>`;
 }
 let mapHost = null, lmap = null, layer = null, lfDiv = null, fbDiv = null, chipEl = null, noteEl = null;
 let tileLayer = null, tilesOn = false;   // 타일은 실제 지도가 화면에 붙은 뒤에만 요청해요 (오프라인이면 요청 0개)
@@ -1426,9 +1569,7 @@ let mapMode = "real";          // "real" 실제 지도 | "fallback" 약식 지�
 let mapNote = "";              // 약식 지도로 바뀐 이유
 const tileState = {err:0, ok:0, timer:null};
 const REDUCE = (function(){ try{ return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } })();
-function mapList(){
-  return STORES.filter(s => (S.cat==="all"||s.cat===S.cat) && (!S.gap || total(s)<=S.gap) && (!S.safe || s.items.some(it => !hits(it).length)));
-}
+function mapList(){ return STORES.filter(passes); }
 
 /* ---------- 약식 지도 (오프라인용): 실제 좌표를 1m=1.6px로 그린 스크롤 지도 ---------- */
 const KPM = 1.6, MLAT = 111320, MLNG = 111320*Math.cos(STATION.lat*Math.PI/180);
@@ -1479,7 +1620,7 @@ function fbHTML(list){
     return pinHTML(s).replace('class="pin', 'style="left:'+fx(s.lng)+'px;top:'+fy(s.lat)+'px" class="pin');
   }).join("");
   return '<div class="fbc" style="width:'+FBW+'px;height:'+FBH+'px">' + fbBackground()
-    + '<span class="stn" style="left:'+fx(STATION.lng)+'px;top:'+(fy(STATION.lat)+24)+'px">경성대·부경대역 · 도보 5분</span>' + pins + '</div>';
+    + '<span class="stn" style="left:'+fx(STATION.lng)+'px;top:'+(fy(STATION.lat)+24)+'px">경성대·부경대역</span>' + pins + '</div>';
 }
 
 /* ---------- 지도 (실제: Leaflet + OSM / 약식: 위 그림) ---------- */
@@ -1521,7 +1662,7 @@ function initMap(){
       tl.on("load", function(){ if(tileState.ok === 0 && tileState.err > 0) toFallback("지도 타일을 불러오지 못해 약식 지도로 보여요"); });   // 보이는 타일이 전부 실패하면 바로 전환
       L.control.attribution({prefix:false}).addAttribution('<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a>').addTo(lmap);
       L.circle([STATION.lat, STATION.lng], {radius:350, color:tok("--brand"), weight:1.5, dashArray:"5 5", fillOpacity:.04}).addTo(lmap);
-      L.marker([STATION.lat, STATION.lng], {interactive:false, icon:L.divIcon({className:"mk", iconSize:[0,0], html:'<span class="stn">경성대·부경대역 · 도보 5분</span>'})}).addTo(lmap);
+      L.marker([STATION.lat, STATION.lng], {interactive:false, icon:L.divIcon({className:"mk", iconSize:[0,0], html:'<span class="stn">경성대·부경대역</span>'})}).addTo(lmap);
       layer = L.layerGroup().addTo(lmap);
     }catch(e){ lmap = null; layer = null; }
   }
@@ -1558,58 +1699,80 @@ function syncMap(list){
 }
 
 /* ---------- 학생 화면 ---------- */
+function soloText(s){ return s.demo ? "점심 1인 세트" : (s.solo === true ? "점심 1인 메뉴 참고" : "점심 메뉴"); }
 function tagsFor(s, it){
   const h = hits(it);
   return `<div class="tags">
-    ${s.demo?`<span class="tag live">지금 경성대생 <span data-live="demo">${S.viewers.demo}</span>명 보는 중 · <span data-going="demo">${S.going.demo}</span>명 가는 중 (예시)</span>`:""}
+    ${s.demo?`<span class="tag live">👁 지금 <span data-live="demo">${S.viewers.demo}</span>명이 보는 중 · <span data-going="demo">${S.going.demo}</span>명이 가는 중 (예시)</span>`:""}
     <span class="tag src-${s.src}">${SRC[s.src]}</span>
     ${h.length?`<span class="tag warn">내 알레르기 · ${h.map(k=>ING[k].ko).join("·")} 포함${sure(s)?"":" 가능성"}</span>`:""}
     <span class="tag">도보 ${s.walk}분 · 다녀오면 약 ${total(s)}분</span>
   </div>`;
 }
+function chipsHTML(){
+  const F = [["walk","f_walk"],["solo","f_solo"],["budget","f_budget"],["takeout","f_take"]];
+  return F.map(([k,t]) => `<button class="chip" data-act="fl" data-v="${k}" aria-pressed="${!!S.f[k]}">${tr(t)}</button>`).join("")
+    + `<button class="chip" data-act="safe" aria-pressed="${S.safe}">${tr("f_safe")}</button>`
+    + CATS.map(([k,l]) => `<button class="chip" data-act="cat" data-v="${k}" aria-pressed="${S.cat===k}">${l}</button>`).join("");
+}
 function vMap(){
-  const list = STORES.filter(s => (S.cat==="all"||s.cat===S.cat)
-    && (!S.gap || total(s)<=S.gap)
-    && (!S.safe || s.items.some(it => !hits(it).length)));
-  const s = list.find(x=>x.id===S.sel) || null;
+  const list = mapList();
+  const s = list.find(x => x.id === S.sel) || null;
   const it = s ? curDish(s) : null;
   return `
   <div class="top">
-    <div><h2>오늘 뭐 먹지?</h2><p class="sub">가게 말고 메뉴부터 골라요 · 경성대·부경대역 실제 골목</p></div>
-    <div class="chips">
-      <button class="chip cond" data-act="gap" aria-pressed="${S.gap>0}">${S.gap?`공강 ${S.gap}분`:"공강 시간"}</button>
-      <button class="chip cond" data-act="safe" aria-pressed="${S.safe}">내 알레르기 제외</button>
-      ${CATS.map(([k,l])=>`<button class="chip" data-act="cat" data-v="${k}" aria-pressed="${S.cat===k}">${l}</button>`).join("")}
-    </div>
+    <div class="hdr"><button class="hbtn" data-act="histBack" aria-label="${esc(tr("back"))}">${tr("back")}</button><h2>${tr("title")}</h2><button class="hbtn" data-act="dataInfo" aria-label="데이터 안내">ⓘ</button></div>
+    <div class="locrow"><button class="loc" data-act="locInfo">📍 ${tr("loc")} ⌄</button><button class="gappill" data-act="gap" aria-label="${esc(tr("gap"))} ${S.gap}${esc(tr("min"))}">⏱ ${tr("gap")} ${S.gap}${tr("min")}</button></div>
+    <div class="chips">${chipsHTML()}</div>
     <button class="demoline" data-act="detail" data-v="demo"><span class="tag src-demo">시연용</span>리뷰·비밀 피드백은 ‘예시 가게’에서 체험해요 ›</button>
   </div>
   <div id="mapslot"></div>
+  <button class="cbanner" data-act="perk"><span class="tag src-demo">예시</span><span>${esc(tr("banner"))} ›</span></button>
   <div class="sheet">
     ${s ? `
       <div class="head"><div class="tile">${it?it.e:CE[s.cat]}</div>
-        <div><h3>${it?nameOf(it,S.lang):esc(s.store)}</h3><p class="meta">${esc(s.store)} · ${it?(S.lang!=="ko"?koOf(it):"대표 메뉴"):"대표 메뉴 확인 중"}</p></div>
+        <div><h3>${it?nameOf(it,S.lang):esc(s.store)}</h3><p class="meta">${esc(s.store)} · 도보 ${s.walk}분 · ${soloText(s)}</p></div>
         <span class="price">${priceOf(it,s)}</span></div>
-      ${s.items.length>1?`<div class="chips">${s.items.map((x,i)=>`<button class="chip" data-act="dish" data-v="${i}" aria-pressed="${curDish(s)===x}">${koOf(x)}</button>`).join("")}</div>`:""}
+      ${s.items.length>1?`<div class="chips">${s.items.map((x,i)=>`<button class="chip" data-act="dish" data-v="${i}" aria-pressed="${curDish(s)===x}">${esc(nameOf(x,S.lang))}</button>`).join("")}</div>`:""}
       ${tagsFor(s,it)}
-      <div class="btns"><button class="btn ghost" data-act="walk">길 안내 (카카오맵)</button><button class="btn" data-act="detail" data-v="${s.id}">${it?"재료·알레르기 보기":"자세히 보기"}</button></div>
+      <div class="btns"><button class="btn ghost" data-act="detail" data-v="${s.id}">${tr("detail")}</button><button class="btn" data-act="walk">${tr("route")}</button></div>
     ` : `<p class="empty">${list.length?"핀을 눌러 메뉴를 확인해요.":"조건에 맞는 메뉴가 없어요."}</p>${list.length?"":'<button class="btn ghost" data-act="clearFilters">필터 모두 해제</button>'}`}
   </div>`;
+}
+function infoTile(icon, label, val, state){
+  // state: "ok" 확인됨 · "ref" 업종 기준 참고 · "unk" 확인 중(회색)
+  return `<div class="itile ${state==="unk"?"unk":""}"><i>${icon}</i><span class="il">${esc(label)}</span><b>${esc(val)}</b></div>`;
+}
+function flagTile(icon, label, v, s){
+  if(v === true) return infoTile(icon, label, sure(s) ? tr("yes") : tr("ref_yes"), sure(s) ? "ok" : "ref");
+  if(v === false) return infoTile(icon, label, "✕", "ok");
+  return infoTile(icon, label, tr("unk"), "unk");
 }
 function vDetail(){
   const s = store(S.target), L = S.lang, it = curDish(s), h = hits(it), isMeal = s.cat!=="sweet";
   const after = STORES.filter(x=>x.cat==="sweet" && x.id!==s.id).map(x=>({x, m:mins(dist(s,x))})).sort((a,b)=>a.m-b.m).slice(0,2);
   const revs = S.reviews.filter(r=>r.id===s.id);
-  const head = it ? `<div class="head"><div class="tile">${it.e}</div>
-      <div><h2>${nameOf(it,L)}</h2><p class="sub">${L!=="ko"?koOf(it)+" · ":""}${esc(s.store)} · ${priceOf(it,s)}</p></div></div>`
-    : `<div class="head"><div class="tile">${CE[s.cat]}</div><div><h2>${esc(s.store)}</h2><p class="sub">대표 메뉴 확인 중</p></div></div>`;
+  const saved = S.saved.indexOf(s.id) >= 0;
+  const emoji = it ? it.e : CE[s.cat];
+  const sub = it ? ((L==="ko" ? ((it.name && it.name.en) || "") : koOf(it)) + " · " + s.store) : "대표 메뉴 확인 중";
   return `
-  <div class="top">
-    <button class="back" data-act="back">‹ 지도로</button>
-    ${head}
-    ${tagsFor(s,it)}
-  </div>
+  <div class="top"><button class="back" data-act="back">${tr("back")}</button></div>
   <div class="scroll">
-    ${s.items.length>1?`<div class="tags">${s.items.map((x,i)=>`<button class="chip" data-act="dish" data-v="${i}" aria-pressed="${it===x}">${nameOf(x,L)}</button>`).join("")}</div>`:""}
+    <div class="hero"><div class="herotile">${emoji}</div>${s.demo?`<span class="herobadge">👁 지금 <span data-live="demo">${S.viewers.demo}</span>명이 보는 중 (예시)</span>`:""}</div>
+    <div class="dhead">
+      <h2>${it?nameOf(it,L):esc(s.store)}</h2>
+      <p class="sub">${esc(sub)}</p>
+      <div class="bigprice">${priceOf(it,s)}</div>
+      ${it && it.extra ? `<p class="extra">${esc(it.extra)}</p>` : ""}
+    </div>
+    ${tagsFor(s,it)}
+    <div class="tiles4">
+      <div class="itile"><i>🚶</i><b>${esc(trn("t_walk", s.walk))}</b></div>
+      ${flagTile("🍴", tr("t_solo"), s.solo, s)}
+      ${s.hours ? infoTile("🕐", tr("t_hours"), s.hours, sure(s)?"ok":"ref") : infoTile("🕐", tr("t_hours"), tr("unk"), "unk")}
+      ${flagTile("🛍", tr("t_take"), s.takeout, s)}
+    </div>
+    ${s.items.length>1?`<div class="tags">${s.items.map((x,i)=>`<button class="chip" data-act="dish" data-v="${i}" aria-pressed="${it===x}">${esc(nameOf(x,L))}</button>`).join("")}</div>`:""}
     ${it ? `<div class="card">
       <span class="eyebrow">${sure(s)?"재료·알레르기 · 사장님 확인 후 공개":"재료·알레르기 · 일반 조리법 기준 참고 (이 가게 실제 재료와 다를 수 있어요)"}</span>
       <div class="seg" role="group" aria-label="언어">${LANGS.map(([k,l])=>`<button data-act="lang" data-v="${k}" aria-pressed="${L===k}">${l}</button>`).join("")}</div>
@@ -1633,7 +1796,7 @@ function vDetail(){
     ${isMeal ? `<div class="card">
       <span class="eyebrow">밥 먹고 카페까지, 공강 한 번에</span>
       <div class="course">
-        <div class="stop"><i>${it?it.e:CE[s.cat]}</i><b>${it?koOf(it):esc(s.store)}</b><span>${EAT[s.cat]}분(예상)</span></div>
+        <div class="stop"><i>${emoji}</i><b>${it?koOf(it):esc(s.store)}</b><span>${EAT[s.cat]}분(예상)</span></div>
         ${after.map(({x,m})=>{ const d=x.items[0]; return `<span class="arrow">→<br>${m}분</span><button class="stop" data-act="detail" data-v="${x.id}"><i>${d?d.e:CE.sweet}</i><b>${d?koOf(d):esc(x.short||x.store)}</b><span>${esc(x.short||x.store)}</span></button>`; }).join("")}
       </div>
       <div class="timeline" aria-label="공강 90분 예시">
@@ -1647,8 +1810,40 @@ function vDetail(){
     ${S.written[s.id] ? `<div class="done">방문 인증과 의견 작성을 마쳤어요</div>`
       : S.verified[s.id] ? `<button class="btn" data-act="review">리뷰·비밀 피드백 쓰기</button>`
       : `<button class="btn" data-act="verify">${s.demo?"테이블 QR로 방문 인증하기":"방문 인증 체험하기 (시연)"}</button><p class="meta">${s.demo?"방문 인증한 학생만 의견을 남길 수 있어요.":"실제 가게는 시연으로만 체험돼요. 사장님 화면 연결은 ‘예시 가게’에서 확인해요."}</p>`}
+    <div class="actbar"><button class="btn ghost" data-act="save" aria-pressed="${saved}">${saved?tr("saved_on"):tr("save")}</button><button class="btn" data-act="walk">${tr("route")}</button></div>
   </div>`;
 }
+function vSaved(){
+  const items = S.saved.map(id => store(id)).filter(Boolean);
+  return `
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("saved_title")}</h2><span class="hsp"></span></div></div>
+  <div class="scroll">
+    ${items.length ? items.map(s => { const it = curDish(s);
+      return `<div class="card svrow"><div class="tile">${it?it.e:CE[s.cat]}</div>
+        <div class="svbody"><b>${it?esc(nameOf(it,S.lang)):esc(s.store)}</b><p class="meta">${esc(s.store)} · 도보 ${s.walk}분</p><span class="price">${priceOf(it,s)}</span></div>
+        <div class="svbtns"><button class="btn sm ghost" data-act="detail" data-v="${s.id}">${tr("detail")}</button><button class="btn sm ghost" data-act="unsave" data-v="${s.id}" aria-label="저장 해제">✕</button></div></div>`; }).join("")
+      : `<div class="card"><p class="empty">${esc(tr("empty_saved"))}</p><button class="btn ghost" data-act="tab" data-v="map">${esc(tr("empty_saved_btn"))}</button></div>`}
+  </div>`;
+}
+function vMy(){
+  return `
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("my_title")}</h2><span class="hsp"></span></div></div>
+  <div class="scroll">
+    <div class="card"><span class="eyebrow">${tr("my_lang")}</span>
+      <div class="seg" role="group" aria-label="${esc(tr("my_lang"))}">${LANGS.map(([k,l])=>`<button data-act="lang" data-v="${k}" aria-pressed="${S.lang===k}">${l}</button>`).join("")}</div>
+      ${S.lang!=="ko"?'<p class="notice">번역은 초안이에요. 번역이 없는 문구는 한국어로 보여요.</p>':""}</div>
+    <div class="card"><span class="eyebrow">${tr("my_al")}</span>
+      <p class="meta">골라 두면 지도의 핀과 메뉴마다 먼저 알려 드려요. (일반 조리법 기준 참고값)</p>
+      <div class="tags">${Object.keys(ING).map(k=>`<button class="chip" data-act="myAl" data-v="${k}" aria-pressed="${S.myAllergy.includes(k)}">${ING[k].e} ${ING[k][L_(k)]}</button>`).join("")}</div></div>
+    <div class="card"><span class="eyebrow">앱 정보</span>
+      <button class="btn ghost" data-act="detail" data-v="demo">예시 가게 체험 (시연용)</button>
+      <button class="btn ghost" data-act="help">첫 화면 다시 보기</button>
+      <button class="btn ghost" data-act="dataInfo">ⓘ 데이터 안내</button>
+      <button class="btn ghost" data-act="reset">↺ 처음으로 (초기화)</button></div>
+  </div>`;
+}
+function L_(k){ return ING[k][S.lang] ? S.lang : "ko"; }
+
 function vReview(){
   const s = store(S.target);
   const cafes = STORES.filter(x=>x.cat==="sweet" && x.id!==s.id && mins(dist(s,x))<=3);
@@ -1683,7 +1878,7 @@ function vDone(){
 function vPick(){
   const r = ranking();
   return `
-  <div class="top"><div><h2>11월 캠퍼스 픽</h2><p class="sub">피드백을 반영해 고친 가게를 매월 뽑아요</p></div></div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("perks_title")}</h2><span class="hsp"></span></div>${benefitSeg()}</div>
   <div class="scroll">
     <div class="card"><span class="eyebrow">이번 달 추천하기 · 점수 집계 전</span>
       <p class="meta">실제 가게의 점수는 서비스가 시작된 뒤 방문 인증과 평가가 쌓이면 계산돼요. 지금은 추천만 받아요.</p>
@@ -1700,7 +1895,7 @@ function vPick(){
 }
 function vNotif(){
   return `
-  <div class="top"><div><h2>알림·쿠폰</h2><p class="sub">내가 남긴 의견이 어떻게 쓰였는지 알려 드려요</p></div></div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("perks_title")}</h2><span class="hsp"></span></div>${benefitSeg()}</div>
   <div class="scroll">
     <div class="card"><span class="eyebrow">알림</span>
       ${S.notifs.map(n=>`<div class="notif ${n.read?"read":""}"><span class="dot"></span><div><b>${n.t}</b><p class="meta">${n.d}</p></div></div>`).join("")}
@@ -1714,6 +1909,11 @@ function vNotif(){
     </div>
   </div>`;
 }
+
+function benefitSeg(){
+  return `<div class="seg" role="group" aria-label="${esc(tr("perks_title"))}"><button data-act="btab" data-v="pick" aria-pressed="${S.btab!=="notif"}">${tr("seg_pick")}</button><button data-act="btab" data-v="notif" aria-pressed="${S.btab==="notif"}">${tr("seg_coupon")}${S.unread?` (${S.unread})`:""}</button></div>`;
+}
+function vBenefit(){ return S.btab === "notif" ? vNotif() : vPick(); }
 
 /* ---------- 사장님 화면 (전부 ‘예시 가게’ 시연 데이터) ---------- */
 const EX = '<span class="exbadge">시연용 예시 데이터 · 실제 가게 아님</span>';
@@ -1782,9 +1982,9 @@ function draw(){
   if(mapHost && mapHost.parentNode) mapHost.remove();      // innerHTML을 갈아끼우기 전에 지도를 떼어 둠
   if(S.mode==="student"){
     const scr = {detail:vDetail, review:vReview, done:vDone}[S.screen];
-    body = scr ? scr() : {map:vMap, pick:vPick, notif:vNotif}[S.tab]();
-    nav = [["map","📍","메뉴 지도"],["pick","🏅","캠퍼스 픽"],["notif","🔔","알림·쿠폰"]]
-      .map(([k,i,l])=>`<button data-act="tab" data-v="${k}" ${!S.screen&&S.tab===k?'aria-current="page"':""}><i>${i}</i>${l}${k==="notif"&&S.unread?`<span class="badge">${S.unread}</span>`:""}</button>`).join("");
+    body = scr ? scr() : {map:vMap, saved:vSaved, benefit:vBenefit, my:vMy}[S.tab]();
+    nav = [["map","📍",tr("tab_near")],["saved","♡",tr("tab_saved")],["benefit","🎁",tr("tab_perks")],["my","👤",tr("tab_my")]]
+      .map(([k,i,l])=>`<button data-act="tab" data-v="${k}" ${!S.screen&&S.tab===k?'aria-current="page"':""}><i>${i}</i>${l}${k==="benefit"&&S.unread?`<span class="badge">${S.unread}</span>`:""}</button>`).join("");
   } else {
     body = {live:vLive, report:vReport, opick:vOwnerPick}[S.otab]();
     nav = [["live","📈","실시간 반응"],["report","📑","월간 리포트"],["opick","🏅","캠퍼스 픽"]]
@@ -1792,6 +1992,7 @@ function draw(){
   }
   $("#app").innerHTML = body + `<nav class="nav">${nav}</nav>`;
   const slot = $("#mapslot");
+  $("#app").classList.toggle("is-map", !!slot);   // 가로 화면에서 지도 화면만 2단으로 배치하는 데 써요
   if(slot){
     if(!mapHost) initMap();
     slot.replaceWith(mapHost);
@@ -1850,7 +2051,7 @@ window.addEventListener("popstate", function(e){
   if(!v) return;
   try{
     if(["student","owner"].indexOf(v.mode) >= 0) S.mode = v.mode;
-    if(["map","pick","notif"].indexOf(v.tab) >= 0) S.tab = v.tab;
+    if(["map","saved","benefit","my"].indexOf(v.tab) >= 0) S.tab = v.tab;
     if(["live","report","opick"].indexOf(v.otab) >= 0) S.otab = v.otab;
     S.screen = (v.screen === "detail" || v.screen === "review" || v.screen === "done") && store(v.target) ? v.screen : null;
     if(store(v.target)) S.target = v.target;
@@ -2014,19 +2215,29 @@ document.addEventListener("pointerdown", function(e){
 });
 
 const ACT = {
+  fl(v){ if(S.f && Object.prototype.hasOwnProperty.call(S.f, v)) S.f[v] = !S.f[v]; },
+  locInfo(){ toast("지금은 경성대·부경대역 상권만 보여요. (시연)"); return false; },
+  histBack(){ if(S.screen){ S.screen = null; return; } if(S.tab !== "map"){ S.tab = "map"; return; } openOverlay("intro"); return false; },
+  perk(){ S.screen = null; S.tab = "benefit"; S.btab = "notif"; S.unread = 0; setTimeout(() => { S.notifs.forEach(n => n.read = true); }, 0); },
+  btab(v){ S.btab = v === "notif" ? "notif" : "pick"; if(S.btab === "notif"){ S.unread = 0; setTimeout(() => { S.notifs.forEach(n => n.read = true); }, 0); } },
+  save(){ const id = S.target; if(!store(id)) return false;
+    if(S.saved.indexOf(id) >= 0){ S.saved = S.saved.filter(x => x !== id); toast("저장을 해제했어요."); }
+    else { S.saved = S.saved.concat([id]); toast("저장했어요. ‘저장’ 탭에서 볼 수 있어요."); } },
+  unsave(v){ S.saved = S.saved.filter(x => x !== v); },
   mode(v){ if(S.mode===v && v==="student"){ S.screen=null; S.tab="map"; } S.mode=v; },
-  tab(v){ S.tab=v; S.screen=null; if(v==="notif"){ S.unread=0; setTimeout(()=>{S.notifs.forEach(n=>n.read=true)},0); } },
+  tab(v){ S.tab=v; S.screen=null; if(v==="benefit" && S.btab==="notif"){ S.unread=0; setTimeout(()=>{S.notifs.forEach(n=>n.read=true)},0); } },
   otab(v){ S.otab=v; },
   cat(v){ S.cat=v; },
   safe(){ S.safe=!S.safe; },
-  gap(){ S.gap = {0:60, 60:40, 40:0}[S.gap]; },
+  gap(){ S.gap = {30:60, 60:90, 90:30}[S.gap] || 60; },
   sel(v){ S.sel=v; },
   dish(v){ const id = S.screen==="detail" ? S.target : S.sel; S.dish[id] = Math.max(0, +v || 0); },
-  walk(){ const s = store(S.sel); if(!s) return false;
+  walk(){ const s = store(S.screen === "detail" ? S.target : S.sel); if(!s) return false;
+    if(s.demo){ toast("예시 가게는 가상이라 길찾기가 없어요. (시연용)"); return false; }
     window.open(`https://map.kakao.com/link/to/${encodeURIComponent(s.store)},${s.lat},${s.lng}`, "_blank", "noopener");
     return false; },
   detail(v){ S.target=v; S.screen="detail"; },
-  back(){ S.screen=null; S.tab="map"; if(store(S.target) && !store(S.target).demo) S.sel=S.target; },
+  back(){ S.screen=null; if(store(S.target) && !store(S.target).demo && S.tab==="map") S.sel=S.target; },
   home(){ S.screen=null; S.tab="map"; },
   lang(v){ S.lang=v; },
   myAl(v){ S.myAllergy = S.myAllergy.includes(v) ? S.myAllergy.filter(x=>x!==v) : [...S.myAllergy,v]; },
@@ -2046,14 +2257,14 @@ const ACT = {
     toast("의견을 남긴 학생에게 ‘개선했어요’ 알림을 보냈어요."); },
   vote(v){ if(S.voted) return false; S.voted=v; toast(`${store(v).short||store(v).store}를 이번 달 캠퍼스 픽으로 추천했어요. 집계는 월말에 해요.`); },
   step(v){ v=+v; demo.n = v;
-    if(v===1){ S.mode="student"; S.screen=null; S.tab="map"; S.cat="all"; S.safe=false; S.gap=0; S.sel="hakone"; S.lang="ko"; }
+    if(v===1){ S.mode="student"; S.screen=null; S.tab="map"; S.cat="all"; S.safe=false; S.gap=60; S.f={walk:false,solo:false,budget:false,takeout:false}; S.sel="hakone"; S.lang="ko"; }
     if(v===2){ S.mode="student"; S.target="hakone"; S.dish.hakone=0; S.screen="detail"; S.lang="en"; }
     if(v===3){ S.mode="student"; S.target="demo"; S.lang="ko"; if(S.written.demo) S.screen="detail"; else if(S.verified.demo){ S.screen="review"; S.fbSel=[]; } else verify(); }
     if(v===4){ S.mode="owner"; S.otab="live"; }
     if(v===5){ S.mode="owner"; S.otab="report"; }
-    if(v===6){ S.mode="student"; S.screen=null; S.tab = S.applied ? "notif" : "pick"; if(S.applied) S.unread=0; }
+    if(v===6){ S.mode="student"; S.screen=null; S.tab = "benefit"; S.btab = S.applied ? "notif" : "pick"; if(S.applied) S.unread=0; }
   },
-  clearFilters(){ S.cat="all"; S.safe=false; S.gap=0; },
+  clearFilters(){ S.cat="all"; S.safe=false; S.gap=90; S.f={walk:false,solo:false,budget:false,takeout:false}; },
   mapmode(){ setMapMode(mapMode==="real" ? "fallback" : "real"); return false; },
   help(){ openOverlay("intro"); return false; },
   dataInfo(){ openOverlay("data"); return false; },
