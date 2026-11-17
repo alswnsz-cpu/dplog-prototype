@@ -310,51 +310,80 @@ const nm = (ko,en,zh,vi,ne) => ({ko,en,zh,vi,ne});
 /* price: null = 확인 전 / ing·spicy = 일반 조리법 기준 참고값 */
 const STORES = [
   {id:"hyeong", store:"형제국밥", lat:35.13707, lng:129.10208, cat:"soup", src:"web",
-   note:"맵기 조절, 라면·우동·당면 사리 선택 가능 (후기 기준)",
+   note:"솥밥 무료 제공(공식 사이트 기준) · 맵기 조절, 라면·우동·당면 사리 선택 가능(후기 기준) · 가격은 웹 참고가(날짜 미상)",
    items:[
-    {e:"🌶️", price:null, spicy:2, ing:["pork"], name:nm("불꽃국밥","Spicy pork rice soup","辣味猪肉汤饭","Cơm canh heo cay","पिरो सुँगुर भात सुप")},
-    {e:"🍲", price:null, spicy:0, ing:["pork"], name:nm("맑은 돼지국밥","Clear pork rice soup","清汤猪肉汤饭","Cơm canh heo trong","सफा सुँगुर भात सुप")}]},
-  {id:"jeongseong", store:"정성식당", lat:35.13762, lng:129.10219, cat:"soup", src:"none", items:[]},
-  {id:"joseon", store:"조선칼국수", lat:35.13670, lng:129.09985, cat:"soup", src:"none", items:[]},
+    {e:"🌶️", price:11000, spicy:2, ing:["pork"], name:nm("불꽃국밥","Spicy pork rice soup","辣味猪肉汤饭","Cơm canh heo cay","पिरो सुँगुर भात सुप")},
+    {e:"🍲", price:10000, spicy:0, ing:["pork"], name:nm("맑은 돼지국밥","Clear pork rice soup","清汤猪肉汤饭","Cơm canh heo trong","सफा सुँगुर भात सुप")},
+    {e:"🥘", price:12000, spicy:3, ing:["pork","soy","peanut"], name:nm("마라 돼지국밥","Mala pork rice soup","麻辣猪肉汤饭","Cơm canh heo mala","माला सुँगुर भात सुप")}]},
+  {id:"jeongseong", store:"정성식당", lat:35.13762, lng:129.10219, cat:"soup", src:"web",
+   note:"가격은 웹 참고가(날짜 미상)",
+   items:[
+    {e:"🥘", price:9900,  spicy:2, ing:["pork","soy"],         name:nm("김치찜","Braised kimchi with pork","泡菜炖猪肉","Kimchi hầm thịt heo","पोर्कसहित किमची स्ट्यु")},
+    {e:"🍖", price:8900,  spicy:2, ing:["pork","soy","wheat"], name:nm("매실두루치기","Plum stir-fried pork","梅子炒猪肉","Thịt heo xào mơ","मेवा-सुँगुर फ्राई")},
+    {e:"🍲", price:19000, spicy:2, ing:["pork","soy","fish"],  name:nm("김치전골 (2인)","Kimchi hot pot (for 2)","泡菜火锅 (2人)","Lẩu kimchi (2 người)","किमची हटपट (२ जनाका लागि)")}]},
+  {id:"joseon", store:"조선칼국수", lat:35.13670, lng:129.09985, cat:"soup", src:"web",
+   note:"웹 가격 5,000~6,000원대로 표기(날짜 미상, 확인 필요)",
+   items:[
+    {e:"🍜", price:null, spicy:0, ing:["wheat","shellfish","soy","egg"], name:nm("조선칼국수","Joseon knife-cut noodle soup","朝鲜刀切面","Mì cắt tay Joseon","जोसोन हातले काटेको नुडल सुप")},
+    {e:"🥣", price:null, spicy:0, ing:["wheat","shellfish","soy"],       name:nm("항아리 수제비","Jar hand-pulled dough soup","坛子手撕面片汤","Súp bột kéo tay trong hũ","भाँडोमा च्यातेको पिठो सुप")},
+    {e:"🥢", price:null, spicy:2, ing:["wheat","egg","soy"],             name:nm("조선비빔국수","Joseon spicy mixed noodles","朝鲜拌面","Mì trộn cay Joseon","जोसोन पिरो मिसाएको नुडल")}]},
   {id:"genroku", store:"겐로쿠우동 경성대부경대점", short:"겐로쿠우동", lat:35.13703, lng:129.10328, cat:"noodle", src:"web",
-   note:"규슈식 지도리(닭) 우동 전문점으로 소개돼 있어요",
+   note:"규슈식 지도리(닭) 우동 전문점으로 소개돼 있어요 · 가격은 웹 참고가(날짜 미상)",
    items:[
-    {e:"🍜", price:null, spicy:1, ing:["wheat","chicken","soy"], name:nm("지도리우동","Chicken udon","鸡肉乌冬面","Udon gà","कुखुराको उडोन")},
-    {e:"🍜", price:null, spicy:0, ing:["wheat","beef","soy"],    name:nm("니쿠우동","Beef udon","牛肉乌冬面","Udon bò","गाईको उडोन")},
-    {e:"🍗", price:null, spicy:0, ing:["chicken","soy"],         name:nm("지도리 모모야키","Grilled chicken thigh","烤鸡腿肉","Đùi gà nướng","कुखुराको तिघ्रा ग्रिल")}]},
+    {e:"🍜", price:10000, spicy:1, ing:["wheat","chicken","soy"], name:nm("지도리우동","Chicken udon","鸡肉乌冬面","Udon gà","कुखुराको उडोन")},
+    {e:"🍜", price:10000, spicy:0, ing:["wheat","beef","soy"],    name:nm("니쿠우동","Beef udon","牛肉乌冬面","Udon bò","गाईको उडोन")},
+    {e:"🍚", price:3500,  spicy:0, ing:["pork","soy","wheat"],    name:nm("미니 부타동","Mini pork rice bowl (butadon)","迷你猪肉盖饭","Cơm thịt heo mini (butadon)","सानो सुँगुर भात बाटी (बुटादोन)")}]},
   {id:"hakone", store:"하코네 라멘", lat:35.13498, lng:129.10028, cat:"noodle", src:"web",
-   note:"닌니쿠라멘은 수~금 한정, 일요일 휴무 (후기 기준)",
+   note:"닌니쿠라멘은 수~금 한정, 일요일 휴무 (후기 기준) · 가격은 웹 참고가(날짜 미상)",
    items:[
-    {e:"🍜", price:null, spicy:0, ing:["pork","wheat","egg","soy"], name:nm("돈코츠라멘","Tonkotsu ramen","豚骨拉面","Ramen tonkotsu","टोन्कोत्सु रामेन")},
-    {e:"🍜", price:null, spicy:2, ing:["pork","wheat","soy"],       name:nm("탄탄멘","Tantanmen","担担面","Tantanmen","तान्तानमेन")},
-    {e:"🍜", price:null, spicy:2, ing:["pork","wheat","egg","soy"], name:nm("카라미소라멘","Spicy miso ramen","辣味噌拉面","Ramen miso cay","पिरो मिसो रामेन")}]},
+    {e:"🍜", price:9000,  spicy:0, ing:["pork","wheat","egg","soy"], name:nm("돈코츠라멘","Tonkotsu ramen","豚骨拉面","Ramen tonkotsu","टोन्कोत्सु रामेन")},
+    {e:"🍜", price:10000, spicy:2, ing:["pork","wheat","soy"],       name:nm("탄탄멘","Tantanmen","担担面","Tantanmen","तान्तानमेन")},
+    {e:"🍜", price:10000, spicy:2, ing:["pork","wheat","egg","soy"], name:nm("카라미소라멘","Spicy miso ramen","辣味噌拉面","Ramen miso cay","पिरो मिसो रामेन")},
+    {e:"🍜", price:10000, spicy:1, ing:["pork","wheat","egg","soy"], name:nm("닌니쿠 스태미나라멘","Garlic stamina ramen","大蒜元气拉面","Ramen tỏi tăng lực","लसुन स्टामिना रामेन")}]},
   {id:"myeonsik", store:"면식당 부경대점", lat:35.13627, lng:129.10425, cat:"noodle", src:"chain",
    note:"체인 공통 메뉴예요. 이 지점의 실제 메뉴판은 확인 전이에요",
    items:[
     {e:"🍜", price:null, spicy:0, ing:["pork","wheat","egg","soy"], name:nm("돈코츠라멘","Tonkotsu ramen","豚骨拉面","Ramen tonkotsu","टोन्कोत्सु रामेन")},
     {e:"🥢", price:null, spicy:1, ing:["wheat","egg","soy","pork"], name:nm("마제소바","Maze soba (mixed noodles)","日式拌面","Mì trộn kiểu Nhật","जापानी मिसाएको नुडल")},
     {e:"🍱", price:null, spicy:0, ing:["pork","wheat","egg","milk"],name:nm("모짜치즈카츠","Mozzarella cheese cutlet","芝士炸猪排","Cốt lết phô mai","मोजारेला चीज कटलेट")}]},
-  {id:"sumi", store:"수미식당", lat:35.13223, lng:129.10096, cat:"rice", src:"none", items:[]},
-  {id:"ppalbong", store:"빨봉분식", lat:35.13657, lng:129.09995, cat:"snack", src:"chain",
-   note:"체인 공통 메뉴예요. 이 지점의 실제 메뉴판은 확인 전이에요",
+  {id:"sumi", store:"수미식당", lat:35.13223, lng:129.10096, cat:"rice", src:"web",
+   note:"2인분+된장찌개 세트 17,000원 · 가격은 웹 참고가(날짜 미상)",
    items:[
-    {e:"🌶️", price:null, spicy:2, ing:["wheat","fish","milk"], name:nm("모짜렐라 라볶이","Cheese ramen tteokbokki","芝士拉面炒年糕","Tokbokki phô mai kèm mì","चीज रामेन टोकबोकी")},
-    {e:"🍜", price:null, spicy:2, ing:["wheat","egg","soy"],   name:nm("쫄면","Spicy chewy noodles","辣拌筋面","Mì dai trộn cay","पिरो च्युई नुडल")},
-    {e:"🥗", price:null, spicy:0, ing:["wheat","soy"],         name:nm("샐러드우동","Salad udon","沙拉乌冬面","Udon salad","स्यालेड उडोन")}]},
+    {e:"🍲", price:7500, spicy:2, ing:["soy","egg","pork"], name:nm("순두부찌개","Soft tofu stew","嫩豆腐汤","Canh đậu phụ non","नरम टोफु स्ट्यु")},
+    {e:"🍲", price:7500, spicy:2, ing:["pork","soy"],       name:nm("김치찌개","Kimchi stew","泡菜汤","Canh kimchi","किमची स्ट्यु")},
+    {e:"🍖", price:null, spicy:2, ing:["pork","soy"],       name:nm("두루치기","Stir-fried spicy pork","辣炒猪肉","Thịt heo xào cay","पिरो सुँगुर फ्राई")}]},
+  {id:"ppalbong", store:"빨봉분식", lat:35.13657, lng:129.09995, cat:"snack", src:"web",
+   note:"가격은 웹 참고가(날짜 미상)",
+   items:[
+    {e:"🌶️", price:null, spicy:2, ing:["wheat","fish","milk"],      name:nm("모짜렐라 라볶이","Cheese ramen tteokbokki","芝士拉面炒年糕","Tokbokki phô mai kèm mì","चीज रामेन टोकबोकी")},
+    {e:"🧀", price:8000, spicy:1, ing:["wheat","fish","milk","soy"], name:nm("치즈떡볶이","Cheese tteokbokki","芝士炒年糕","Tokbokki phô mai","चीज टोकबोकी")},
+    {e:"🍜", price:7000, spicy:2, ing:["wheat","egg","soy"],        name:nm("쫄면","Spicy chewy noodles","辣拌筋面","Mì dai trộn cay","पिरो च्युई नुडल")},
+    {e:"🥟", price:8000, spicy:2, ing:["wheat","egg","soy","pork"], name:nm("쫄만두","Chewy noodles with dumplings","筋面配饺子","Mì dai kèm bánh xếp","च्युई नुडल र मम्मो")},
+    {e:"🥗", price:null, spicy:0, ing:["wheat","soy"],              name:nm("샐러드우동","Salad udon","沙拉乌冬面","Udon salad","स्यालेड उडोन")}]},
   {id:"lahua", store:"라화쿵부 경성대부경대점", short:"라화쿵부", lat:35.13718, lng:129.10125, cat:"soup", src:"chain",
    note:"체인 공통 메뉴예요. 이 지점의 실제 메뉴판은 확인 전이에요",
    items:[
     {e:"🥘", price:null, spicy:3, ing:["soy","peanut"],      name:nm("마라탕","Mala soup","麻辣烫","Lẩu mala","माला सुप")},
     {e:"🥘", price:null, spicy:3, ing:["soy","peanut"],      name:nm("마라샹궈","Mala xiang guo (dry pot)","麻辣香锅","Mala xiang guo (xào cay)","माला सियाङ्गुओ")},
     {e:"🍖", price:null, spicy:0, ing:["pork","egg","soy"],  name:nm("꿔바로우","Guobaorou (sweet & sour pork)","锅包肉","Thịt heo chiên chua ngọt","चिनियाँ मीठो-अमिलो सुँगुर")}]},
-  {id:"mima", store:"카페 미마", lat:35.13644, lng:129.10370, cat:"sweet", src:"none", items:[]},
+  {id:"mima", store:"카페 미마", lat:35.13644, lng:129.10370, cat:"sweet", src:"web",
+   note:"가격은 웹 참고가(날짜 미상)",
+   items:[
+    {e:"☕", price:4000, spicy:0, ing:[],                    name:nm("아메리카노","Americano","美式咖啡","Cà phê Americano","अमेरिकानो")},
+    {e:"🍓", price:5500, spicy:0, ing:["wheat","egg","milk"], name:nm("딸기슈","Strawberry choux","草莓泡芙","Bánh su dâu","स्ट्रबेरी श्यू")},
+    {e:"🍵", price:5000, spicy:0, ing:["wheat","egg","milk"], name:nm("말차슈","Matcha choux","抹茶泡芙","Bánh su matcha","माचा श्यू")}]},
   {id:"sulbing", store:"설빙", lat:35.13663, lng:129.10138, cat:"sweet", src:"chain",
    note:"체인 공통 메뉴예요. 이 지점의 실제 메뉴판은 확인 전이에요",
    items:[
     {e:"🍧", price:null, spicy:0, ing:["milk","soy"],         name:nm("팥인절미설빙","Red bean injeolmi bingsu","红豆年糕刨冰","Bingsu đậu đỏ & bánh gạo","रातो सिमी बिङ्सु")},
     {e:"🍧", price:null, spicy:0, ing:["milk","egg","wheat"], name:nm("애플망고치즈설빙","Apple mango cheese bingsu","苹果芒果芝士刨冰","Bingsu xoài phô mai","आँप चीज बिङ्सु")},
     {e:"🍧", price:null, spicy:0, ing:["milk","wheat","soy"], name:nm("오레오초코설빙","Oreo choco bingsu","奥利奥巧克力刨冰","Bingsu Oreo sô-cô-la","ओरियो चकलेट बिङ्सु")}]},
-  {id:"rollpang", store:"롤빵드빠리", lat:35.13596, lng:129.10116, cat:"sweet", src:"none", items:[]}
+  {id:"rollpang", store:"롤뺑드빠리", lat:35.13596, lng:129.10116, cat:"sweet", src:"web",
+   note:"가격은 웹 참고가(날짜 미상)",
+   items:[
+    {e:"🥖", price:6000, spicy:0, ing:["wheat","milk","egg"],        name:nm("마늘바게트","Garlic baguette","蒜香法棍","Bánh mì baguette tỏi","लसुन बगेट")},
+    {e:"🥐", price:4300, spicy:0, ing:["wheat","milk","egg","soy"],  name:nm("앙버터소금빵","Red bean butter salt bread","红豆黄油盐面包","Bánh muối bơ đậu đỏ","रातो सिमी बटर नुन पाउरोटी")},
+    {e:"🥪", price:4800, spicy:0, ing:["wheat","fish","milk","egg"], name:nm("명란치아바타","Pollock roe ciabatta","明太子恰巴塔","Ciabatta trứng cá minh thái","पोलक रो चियाबाट्टा")}]}
 ];
 /* 시연용 가상 가게: 지도에는 나오지 않고, 리뷰·비밀 피드백·사장님 화면 시연에만 쓰여요 */
 const DEMO = {id:"demo", store:"예시 가게", lat:35.1372, lng:129.1006, cat:"noodle", src:"demo", demo:true,
@@ -420,7 +449,7 @@ const safeIdx = s => { const i = s.items.findIndex(it => !hits(it).length); retu
 const curDish = s => s.items.length ? s.items[S.dish[s.id] !== undefined ? S.dish[s.id] : safeIdx(s)] : null;
 const sure = s => s.src==="demo" || s.src==="owner";
 const nameOf = (it,L) => it.name[L] || it.name.en;
-const priceOf = it => it && it.price ? won(it.price) : "가격 확인 중";
+const priceOf = (it,s) => it && it.price ? won(it.price) + (s && !s.demo && s.src!=="owner" ? " · 참고가" : "") : "가격 확인 중";
 
 /* ---------- 지도 (Leaflet + OpenStreetMap, 못 불러오면 약식 지도) ---------- */
 let mapHost = null, lmap = null, layer = null;
@@ -493,7 +522,7 @@ function vMap(){
     ${s ? `
       <div class="head"><div class="tile">${it?it.e:CE[s.cat]}</div>
         <div><h3>${it?it.name[S.lang]||it.name.en:esc(s.store)}</h3><p class="meta">${esc(s.store)} · ${it?(S.lang!=="ko"?it.name.ko:"대표 메뉴"):"대표 메뉴 확인 중"}</p></div>
-        <span class="price">${priceOf(it)}</span></div>
+        <span class="price">${priceOf(it,s)}</span></div>
       ${s.items.length>1?`<div class="chips">${s.items.map((x,i)=>`<button class="chip" data-act="dish" data-v="${i}" aria-pressed="${curDish(s)===x}">${x.name.ko}</button>`).join("")}</div>`:""}
       ${tagsFor(s,it)}
       <div class="btns"><button class="btn ghost" data-act="walk">길 안내 (카카오맵)</button><button class="btn" data-act="detail" data-v="${s.id}">${it?"재료·알레르기 보기":"자세히 보기"}</button></div>
@@ -505,7 +534,7 @@ function vDetail(){
   const after = STORES.filter(x=>x.cat==="sweet" && x.id!==s.id).map(x=>({x, m:mins(dist(s,x))})).sort((a,b)=>a.m-b.m).slice(0,2);
   const revs = S.reviews.filter(r=>r.id===s.id);
   const head = it ? `<div class="head"><div class="tile">${it.e}</div>
-      <div><h2>${nameOf(it,L)}</h2><p class="sub">${L!=="ko"?it.name.ko+" · ":""}${esc(s.store)} · ${priceOf(it)}</p></div></div>`
+      <div><h2>${nameOf(it,L)}</h2><p class="sub">${L!=="ko"?it.name.ko+" · ":""}${esc(s.store)} · ${priceOf(it,s)}</p></div></div>`
     : `<div class="head"><div class="tile">${CE[s.cat]}</div><div><h2>${esc(s.store)}</h2><p class="sub">대표 메뉴 확인 중</p></div></div>`;
   return `
   <div class="top">
