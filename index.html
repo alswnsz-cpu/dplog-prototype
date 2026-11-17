@@ -1139,6 +1139,26 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
   #app.is-map .cbanner{display:none}
   #app.is-map .nav{grid-column:1 / span 2;grid-row:3;position:static}
 }
+
+/* ---- v5.5: 의견 남기기 · 비밀 피드백 ---- */
+.fbsum{flex-direction:row;align-items:center;gap:12px}
+.fbsb{flex:1;min-width:0}
+.fbsb b{display:block;font-size:14.5px;line-height:1.35}
+.vbadge{display:inline-block;margin-top:4px;background:var(--good-bg);color:var(--good);font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px}
+.fbseg button[aria-pressed="true"]{background:var(--brand-dark);color:var(--white);box-shadow:none}
+.fbseg button{min-height:44px;font-size:13px}
+.infobox{background:var(--good-bg);color:var(--good);border-radius:12px;padding:10px 12px;font-size:13px;font-weight:700;line-height:1.45}
+.fbtags{display:flex;flex-wrap:wrap;gap:8px}
+.fbchip{border-width:1.5px}
+.fbchip[aria-pressed="true"]{background:var(--mint);border-color:var(--brand);color:var(--brand-dark)}
+.fbchip[aria-pressed="true"]::before{content:"✔ "}
+.stepper{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.stepper li{display:flex;gap:12px;align-items:flex-start}
+.stepper .stn4{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;border:2px solid var(--line);color:var(--muted);background:var(--card)}
+.stepper li.done .stn4{background:var(--brand);border-color:var(--brand);color:var(--white)}
+.stepper li.now .stn4{border-color:var(--brand);color:var(--brand-dark)}
+.stepper b{font-size:14px;line-height:1.35}
+.stepper li.todo b{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1373,14 +1393,13 @@ const ALL = [...STORES, DEMO];
 const MYSTORE = "예시 가게";
 const MY = "demo";
 const APPLY_BONUS = 6;
-const FB_TAGS = ["양","대기 시간","맵기","가격","위생","응대"];
+const FB_TAGS = ["포장 대기 위치","1인분 양","대기 시간","메뉴판 안내","좌석"];
 const AI_TIP = {
-  "양":"1인분·곱빼기 가격을 나눠 적고, 곱빼기 +1,000원을 메뉴판 맨 위에 표시",
+  "포장 대기 위치":"포장 주문 대기 줄과 수령 위치를 입구 안내판과 메뉴판에 표시하기",
+  "1인분 양":"1인분·곱빼기 가격을 나눠 적고, 곱빼기 추가금을 메뉴판 맨 위에 표시",
   "대기 시간":"공강 맞춤 '점심 한정 1인 세트'로 주문을 단순하게, 12~13시 1인석 2자리 확보",
-  "맵기":"메뉴판에 맵기 픽토그램을 붙이고 '덜 맵게' 선택지를 추가",
-  "가격":"세트 메뉴에 '단품보다 얼마 이득'을 숫자로 표시",
-  "위생":"수저통·물컵 교체 주기를 정하고 매장에 적어 두기",
-  "응대":"주문 순서와 셀프 코너 위치를 입구 안내판으로 붙이기",
+  "메뉴판 안내":"메뉴판에 맵기·재료 픽토그램과 5개 언어 이름을 붙이기",
+  "좌석":"혼밥 1인석 자리를 따로 안내하고 피크 시간대 합석 규칙을 적어 두기",
   "기타":"자유 의견은 다음 달 리포트에 모아서 정리"
 };
 
@@ -1392,8 +1411,8 @@ ALL.forEach(s => { s.walk = mins(dist(STATION, s)); });
 const total = s => 5 + s.walk*2 + EAT[s.cat];     // 탐색 5분 + 왕복 도보 + 식사(예상)
 
 /* ---------- 상태 ---------- */
-const SV = 6;
-const KEY = "dplog-v6", INTRO_KEY = "dplog-intro-v6";
+const SV = 7;
+const KEY = "dplog-v7", INTRO_KEY = "dplog-intro-v6";
 /* 저장소: sessionStorage가 막혀 있어도(시크릿·인앱 브라우저) 메모리로 대체해서 정상 동작해요 */
 const MEM = {};
 const ST = {
@@ -1406,9 +1425,9 @@ function fresh(){
   return {
     mode:"student", tab:"map", otab:"live", screen:null,
     cat:"all", safe:false, gap:60, f:{walk:false,solo:false,budget:false,takeout:false}, saved:[], btab:"pick", sel:"hakone", target:"hakone", dish:{}, lang:"ko", myAllergy:["pork"],
-    navTo:{}, verified:{}, written:{}, fbSel:[], sent:null,
+    navTo:{}, verified:{}, written:{}, fbSel:[], fbMode:"secret", fbDraft:{public:"",secret:""}, sent:null,
     course:{meal:false,sweet:false}, stamps:0, linked:false,
-    fbs:[["양"],["대기 시간","양"]], applied:null, voted:null,
+    fbs:[["1인분 양"],["대기 시간","1인분 양"]], applied:null, voted:null,
     reviews:[], coupons:[], unread:0,
     notifs:[{t:"예시 가게가 개선했어요", d:"칼국수 양: 곱빼기 가격을 메뉴판에 나눠 적었어요 (시연용 예시)", read:true}],
     viewers:{demo:7}, going:{demo:3}, sub:5, views:214,
@@ -1446,12 +1465,14 @@ function sanitize(raw){
   pick("navTo", objOf(() => true));
   pick("verified", objOf(bool));
   pick("written", objOf(bool));
-  pick("fbSel", strArr);
+  pick("fbSel", v => strArr(v) && v.every(t => FB_TAGS.indexOf(t) >= 0));
+  pick("fbMode", oneOf(["public","secret"]));
+  pick("fbDraft", v => isObj(v) && str(v.public) && str(v.secret));
   pick("sent", v => v === null || (isObj(v) && bool(!!v.good) && bool(!!v.secret)));
   pick("course", v => isObj(v) && bool(v.meal) && bool(v.sweet));
   pick("stamps", v => num(v) && v >= 0 && v < 5);
   pick("linked", bool);
-  pick("fbs", v => Array.isArray(v) && v.every(x => strArr(x) && x.length > 0));
+  pick("fbs", v => Array.isArray(v) && v.every(x => strArr(x) && x.length > 0 && x.every(t => !!AI_TIP[t])));
   pick("applied", v => v === null || (str(v) && !!AI_TIP[v]));
   pick("voted", v => v === null || oneOf(ids)(v));
   pick("reviews", v => Array.isArray(v) && v.every(r => isObj(r) && str(r.id) && str(r.text)));
@@ -1534,6 +1555,32 @@ const I18N = {
 const tr = k => { const e = I18N[k]; return e ? (e[S.lang] || e.ko) : k; };
 const trn = (k, n) => tr(k).replace("{n}", n);
 const isNum = v => typeof v === "number" && isFinite(v);
+/* ---------- v5.5: 의견 남기기 문구 (번역이 없는 문구는 ko로 대신해요) ---------- */
+Object.assign(I18N, {
+  fb_title:{ko:"의견 남기기",en:"Leave feedback",zh:"留下意见",vi:"Để lại ý kiến",ne:"प्रतिक्रिया दिनुहोस्"},
+  fb_close:{ko:"닫기",en:"Close",zh:"关闭",vi:"Đóng",ne:"बन्द"},
+  fb_visited:{ko:"방문 확인됨",en:"Visit verified",zh:"已确认到访",vi:"Đã xác nhận ghé thăm",ne:"भ्रमण पुष्टि भयो"},
+  fb_public:{ko:"공개 리뷰",en:"Public review",zh:"公开评价",vi:"Đánh giá công khai",ne:"सार्वजनिक समीक्षा"},
+  fb_secret:{ko:"비밀 피드백",en:"Private feedback",zh:"私密反馈",vi:"Phản hồi riêng tư",ne:"निजी प्रतिक्रिया"},
+  fb_info_secret:{ko:"이 의견은 사장님만 볼 수 있어요. 한 달 모아 요약해서 전해요",en:"Only the owner can see this. We summarize a month of feedback before passing it on."},
+  fb_info_public:{ko:"좋았던 점은 다른 학생이 보고 방문할 수 있어요",en:"Other students can see what you liked and visit."},
+  fb_more:{ko:"더 하고 싶은 말 (선택)",en:"Anything else? (optional)",zh:"还有想说的吗?(选填)",vi:"Bạn muốn nói thêm? (tùy chọn)",ne:"अरू केही? (ऐच्छिक)"},
+  fb_good:{ko:"좋았던 점 (공개 리뷰)",en:"What you liked (public)",zh:"满意的地方(公开)",vi:"Điều bạn thích (công khai)",ne:"मन परेको कुरा (सार्वजनिक)"},
+  fb_send:{ko:"사장님에게 보내기",en:"Send to the owner",zh:"发送给店主",vi:"Gửi cho chủ quán",ne:"मालिकलाई पठाउनुहोस्"},
+  fb_send_pub:{ko:"공개 리뷰 남기기",en:"Post public review",zh:"发布公开评价",vi:"Đăng đánh giá công khai",ne:"सार्वजनिक समीक्षा पोस्ट गर्नुहोस्"},
+  fb_done:{ko:"전달했어요",en:"Sent!",zh:"已发送",vi:"Đã gửi",ne:"पठाइयो"},
+  st1_t:{ko:"아쉬운 점 작성",en:"Write what fell short"}, st1_d:{ko:"공개 별점 없이 사장님에게만",en:"No public stars, owner only"},
+  st2_t:{ko:"한 달 모으기",en:"Collect for a month"}, st2_d:{ko:"3건 이상 모이면 AI가 요약",en:"AI summarizes once 3+ are in"},
+  st3_t:{ko:"사장님에게 전달",en:"Delivered to the owner"}, st3_d:{ko:"원문은 사장님만, 개선안과 함께",en:"Original text for the owner only, with suggestions"},
+  st4_t:{ko:"‘개선했어요’ 공개",en:"Share what improved"}, st4_d:{ko:"바뀐 점만 학생에게, 캠퍼스 픽 기준",en:"Only the changes reach students; used for Campus Pick"}
+});
+const TAGI = {
+  "포장 대기 위치":{ko:"포장 대기 위치",en:"Takeout waiting spot",zh:"打包等候位置",vi:"Chỗ chờ mang đi",ne:"टेकआउट कुर्ने ठाउँ"},
+  "1인분 양":{ko:"1인분 양",en:"Portion size",zh:"单人份分量",vi:"Khẩu phần một người",ne:"एक जनाको मात्रा"},
+  "대기 시간":{ko:"대기 시간",en:"Wait time",zh:"等待时间",vi:"Thời gian chờ",ne:"पर्खने समय"},
+  "메뉴판 안내":{ko:"메뉴판 안내",en:"Menu guide",zh:"菜单说明",vi:"Hướng dẫn thực đơn",ne:"मेनु जानकारी"},
+  "좌석":{ko:"좌석",en:"Seating",zh:"座位",vi:"Chỗ ngồi",ne:"बस्ने ठाउँ"}
+};
 /* 필터 (지도 핀과 목록이 같은 조건으로 걸러져요) */
 function passes(s){
   if(S.cat !== "all" && s.cat !== S.cat) return false;
@@ -1844,34 +1891,43 @@ function vMy(){
 }
 function L_(k){ return ING[k][S.lang] ? S.lang : "ko"; }
 
+function tagName(t){ const e = TAGI[t]; return e ? (e[S.lang] || e.ko) : t; }
 function vReview(){
-  const s = store(S.target);
+  const s = store(S.target), it = curDish(s), mode = S.fbMode === "public" ? "public" : "secret";
   const cafes = STORES.filter(x=>x.cat==="sweet" && x.id!==s.id && mins(dist(s,x))<=3);
+  const verified = !!S.verified[s.id];
+  const draft = (S.fbDraft && typeof S.fbDraft[mode] === "string") ? S.fbDraft[mode] : "";
   return `
-  <div class="top"><button class="back" data-act="detail" data-v="${s.id}">‹ ${esc(s.short||s.store)}</button>
-    <div><h2>식사는 어땠나요?</h2><p class="sub">${esc(s.store)} · <span class="tag live">방문 인증 완료</span></p></div></div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("fb_title")}</h2><button class="hbtn" data-act="closeFb" aria-label="${esc(tr("fb_close"))}">✕</button></div></div>
   <div class="scroll">
+    <div class="card fbsum"><div class="tile">${it?it.e:CE[s.cat]}</div>
+      <div class="fbsb"><b>${it?esc(nameOf(it,S.lang)):esc(s.store)} · ${priceOf(it,s)}</b><p class="meta">${esc(s.store)}</p>${verified?`<span class="vbadge">✔ ${tr("fb_visited")}</span>`:""}</div></div>
+    <div class="seg fbseg" role="group" aria-label="${esc(tr("fb_title"))}">
+      <button data-act="fbMode" data-v="public" aria-pressed="${mode==="public"}">${tr("fb_public")}</button>
+      <button data-act="fbMode" data-v="secret" aria-pressed="${mode==="secret"}">🔒 ${tr("fb_secret")}</button></div>
+    <div class="infobox">${mode==="secret"?"🔒 "+esc(tr("fb_info_secret")):esc(tr("fb_info_public"))}</div>
+    ${mode==="secret" ? `<div class="tags fbtags">${FB_TAGS.map(t=>`<button class="chip fbchip" data-act="fbTag" data-v="${t}" aria-pressed="${S.fbSel.includes(t)}">${esc(tagName(t))}</button>`).join("")}</div>` : ""}
+    <label for="fbText" class="meta">${esc(mode==="secret"?tr("fb_more"):tr("fb_good"))}</label>
+    <textarea id="fbText" placeholder="${esc(mode==="secret"?"예: 포장 줄이 어디인지 몰랐어요":"예: 국물이 진해요")}">${esc(draft)}</textarea>
+    <p class="notice">${mode==="secret"?"아쉬운 점은 별점에 남지 않아요. 한 달 동안 모아 3건 이상일 때 AI가 요약해 사장님에게만 전하고, 원문과 작성자는 보이지 않아요.":"공개 리뷰는 방문한 학생이 쓴 좋았던 점만 보여요."}${s.demo?"":" (시연이라 실제 가게에는 전달되지 않아요)"}</p>
+    <button class="btn" data-act="send">${esc(mode==="secret"?tr("fb_send"):tr("fb_send_pub"))}</button>
     ${s.cat!=="sweet" && cafes.length ? `<div class="card"><span class="eyebrow">근처 카페 어때요? · 도보 3분 안</span>
       <div class="course">${cafes.map(a=>{ const d=a.items[0]; return `<button class="stop" data-act="detail" data-v="${a.id}"><i>${d?d.e:CE.sweet}</i><b>${d?koOf(d):esc(a.short||a.store)}</b><span>${esc(a.short||a.store)} · ${mins(dist(s,a))}분</span></button>`; }).join("")}</div>
       <p class="meta">식당 인증 연계 쿠폰 500원을 드렸어요. 두 곳을 인증하면 코스 스탬프가 찍혀요.</p></div>` : ""}
-    <label for="goodText"><b>👍 좋았던 점 (공개 리뷰)</b></label>
-    <textarea id="goodText" placeholder="예: 국물이 진해요"></textarea>
-    <b>🤫 아쉬운 점 (사장님만)</b>
-    <div class="tags">${FB_TAGS.map(t=>`<button class="chip" data-act="fbTag" data-v="${t}" aria-pressed="${S.fbSel.includes(t)}">${t}</button>`).join("")}</div>
-    <label for="badText" class="meta">더 하고 싶은 말 (선택)</label>
-    <textarea id="badText" placeholder="예: 양이 조금 적어요"></textarea>
-    <p class="notice">아쉬운 점은 별점에 남지 않아요. 한 달 동안 모아 3건 이상일 때 AI가 요약해 사장님에게만 전하고, 원문과 작성자는 보이지 않아요.${s.demo?"":" (시연이라 실제 가게에는 전달되지 않아요)"}</p>
-    <button class="btn" data-act="send">보내고 쿠폰 받기</button>
   </div>`;
 }
 function vDone(){
-  const s = store(S.target), toMine = S.sent.secret && s.demo;
+  const s = store(S.target), sent = S.sent || {}, toMine = !!sent.secret && !!s.demo, n = S.fbs.length;
+  const steps = [["st1_t","st1_d","done"],["st2_t","st2_d","now"],["st3_t","st3_d","todo"],["st4_t","st4_d","todo"]];
   return `
-  <div class="top"><div><h2>전달했어요</h2><p class="sub">${[S.sent.good?"좋았던 점은 공개 리뷰로":"", S.sent.secret?"아쉬운 점은 사장님에게만":""].filter(Boolean).join(", ")} 보냈어요</p></div></div>
+  <div class="top"><div class="hdr"><span class="hsp"></span><h2>${tr("fb_done")}</h2><button class="hbtn" data-act="home" aria-label="${esc(tr("fb_close"))}">✕</button></div></div>
   <div class="scroll">
+    ${sent.secret ? `<div class="card"><span class="eyebrow">🔒 ${tr("fb_secret")}</span>
+      <ol class="stepper">${steps.map(([t,d,st],i)=>`<li class="${st}"><span class="stn4">${st==="done"?"✔":i+1}</span><div><b>${i+1}. ${esc(tr(t))}</b><p class="meta">${esc(tr(d))}${i===1&&s.demo?` · ${Math.min(n,3)}/3 (예시)`:""}</p></div></li>`).join("")}</ol></div>`
+      : `<div class="card"><span class="eyebrow">${tr("fb_public")}</span><p>공개 리뷰가 등록됐어요. 다른 학생이 보고 방문할 수 있어요.</p></div>`}
     <div class="coupon"><span>${esc(s.short||s.store)} 두 번째 방문</span><b>500원 할인</b><span>작성 내용과 무관하게 드려요 (시연)</span></div>
-    ${toMine ? `<div class="card"><span class="eyebrow">이어서 확인</span><p>${s.store}에 이번 달 모인 비밀 피드백이 <b>${S.fbs.length}건</b>이 됐어요. ${S.fbs.length>=3?"사장님 월간 리포트에 요약과 개선안이 열렸어요.":""}</p><button class="btn ghost" data-act="step" data-v="5">사장님 화면에서 보기</button></div>`
-      : S.sent.secret ? `<div class="card"><span class="eyebrow">시연 안내</span><p class="meta">실제 가게에는 전달되지 않아요. ‘예시 가게’에서 피드백을 보내면 사장님 화면에 쌓이는 모습을 볼 수 있어요.</p><button class="btn ghost" data-act="detail" data-v="demo">예시 가게로 이동</button></div>` : ""}
+    ${toMine ? `<div class="card"><span class="eyebrow">이어서 확인</span><p>${esc(s.store)}에 이번 달 모인 비밀 피드백이 <b>${n}건</b>이 됐어요. ${n>=3?"사장님 월간 리포트에 요약과 개선안이 열렸어요.":""}</p><button class="btn ghost" data-act="step" data-v="5">사장님 화면에서 보기</button></div>`
+      : sent.secret ? `<div class="card"><span class="eyebrow">시연 안내</span><p class="meta">실제 가게에는 전달되지 않아요. ‘예시 가게’에서 피드백을 보내면 사장님 화면에 쌓이는 모습을 볼 수 있어요.</p><button class="btn ghost" data-act="detail" data-v="demo">예시 가게로 이동</button></div>` : ""}
     <button class="btn" data-act="home">지도로 돌아가기</button>
   </div>`;
 }
@@ -2116,13 +2172,13 @@ const DEMO_STEPS = [
 ];
 const demo = {on:false, playing:false, finished:false, n:0, timers:[], adv:null};
 function dClear(){ demo.timers.forEach(clearTimeout); demo.timers = []; clearTimeout(demo.adv); }
-function topTag(){ const t = tally(); return t.length ? t[0][0] : "양"; }
-function ensureFbs(){ while(S.fbs.length < 3) S.fbs.push(["양"]); }
+function topTag(){ const t = tally(); return t.length ? t[0][0] : "1인분 양"; }
+function ensureFbs(){ while(S.fbs.length < 3) S.fbs.push(["1인분 양"]); }
 function demoSend(){
   if(!demo.on || demo.n !== 3 || S.screen !== "review") return;
-  S.fbs.push(["양"]); S.reviews.push({id:"demo", text:"국물이 진해요 (시연 입력)"});
+  S.fbs.push(["포장 대기 위치"]); S.reviews.push({id:"demo", text:"국물이 진해요 (시연 입력)"});
   S.coupons.push({s:"예시 가게", d:"두 번째 방문 · 500원 할인 (시연)"}); S.written.demo = true;
-  S.sent = {good:true, secret:true}; S.screen = "done"; render();
+  S.sent = {good:true, secret:true}; S.fbDraft = {public:"", secret:""}; S.fbSel = []; S.screen = "done"; render();
 }
 function demoApply(){
   if(!demo.on || demo.n !== 5 || S.applied) return;
@@ -2243,15 +2299,22 @@ const ACT = {
   myAl(v){ S.myAllergy = S.myAllergy.includes(v) ? S.myAllergy.filter(x=>x!==v) : [...S.myAllergy,v]; },
   ask(){ toast("시연: 요청이 쌓이면 사장님께 ‘학생들이 메뉴 정보를 기다려요’ 알림이 가요."); return false; },
   verify,
-  review(){ S.screen="review"; S.fbSel=[]; },
-  fbTag(v, b){ S.fbSel = S.fbSel.includes(v) ? S.fbSel.filter(x=>x!==v) : [...S.fbSel,v]; b.setAttribute("aria-pressed", S.fbSel.includes(v)); return false; },
-  send(){ const good=$("#goodText").value.trim(), bad=$("#badText").value.trim(), secret = S.fbSel.length>0 || !!bad;
-    if(!good && !secret){ toast("좋았던 점이나 아쉬운 점 중 하나는 남겨 주세요."); return false; }
-    const s = store(S.target);
-    if(good) S.reviews.push({id:s.id, text:good});
-    if(secret && s.demo) S.fbs.push(S.fbSel.length ? [...S.fbSel] : ["기타"]);
-    S.coupons.push({s:s.short||s.store, d:"두 번째 방문 · 500원 할인 (시연)"}); S.written[s.id]=true;
-    S.sent = {good:!!good, secret}; S.screen="done"; },
+  review(){ if(!S.verified[S.target]) return false; S.screen="review"; S.fbSel=[]; },
+  fbTag(v, b){ if(FB_TAGS.indexOf(v) < 0) return false; S.fbSel = S.fbSel.includes(v) ? S.fbSel.filter(x=>x!==v) : [...S.fbSel,v]; b.setAttribute("aria-pressed", S.fbSel.includes(v)); return false; },
+  fbMode(v){ const t = $("#fbText"); if(t) S.fbDraft[S.fbMode] = t.value; S.fbMode = v === "public" ? "public" : "secret"; },
+  closeFb(){ const t = $("#fbText"); if(t) S.fbDraft[S.fbMode] = t.value; S.screen = "detail"; },
+  send(){ const s = store(S.target); if(!s) return false;
+    const t = $("#fbText"), text = (t ? t.value : "").trim();
+    if(S.fbMode === "public"){
+      if(!text){ toast("좋았던 점을 한 줄 적어 주세요."); return false; }
+      S.reviews.push({id:s.id, text}); S.sent = {good:true, secret:false};
+    } else {
+      if(!S.fbSel.length && !text){ toast("아쉬운 점 태그를 고르거나 한 줄 적어 주세요."); return false; }
+      if(s.demo) S.fbs.push(S.fbSel.length ? [...S.fbSel] : ["기타"]);
+      S.sent = {good:false, secret:true};
+    }
+    S.fbDraft = {public:"", secret:""}; S.fbSel = [];
+    S.coupons.push({s:s.short||s.store, d:"두 번째 방문 · 500원 할인 (시연)"}); S.written[s.id] = true; S.screen = "done"; },
   apply(v){ S.applied=v; S.scores[MYSTORE]+=APPLY_BONUS;
     S.notifs.unshift({t:`${MYSTORE}가 개선했어요`, d:`${v}: ${AI_TIP[v]} (시연용 예시)`, read:false}); S.unread++;
     toast("의견을 남긴 학생에게 ‘개선했어요’ 알림을 보냈어요."); },
