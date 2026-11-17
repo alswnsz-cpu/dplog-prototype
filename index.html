@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>D-PLOG 프로토타입</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,6 +53,7 @@ h1,h2,h3{text-wrap:balance}
 
 .phone{width:390px;height:min(820px,100%);background:var(--paper);border-radius:36px;border:8px solid #0a1230;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.35)}
 .mobilebar{display:none}
+.disc{flex:none;font-size:10.5px;line-height:1.4;color:var(--muted);background:var(--card);border-top:1px solid var(--line);padding:5px 12px;text-align:center}
 #app{flex:1;min-height:0;display:flex;flex-direction:column}
 .top{background:var(--card);padding:14px 16px 10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
 .top h2{font-family:var(--font-display);font-weight:400;font-size:24px;line-height:1.15}
@@ -182,14 +184,18 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .toast.show{opacity:1}
 
 @media (max-width:820px){
-  .stage{padding:0;display:block}
-  .guide{display:none}
-  .phone{width:100%;height:100%;border:0;border-radius:0;box-shadow:none}
+  html,body{height:auto;min-height:100%}
+  .stage{padding:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;height:auto}
+  .guide{order:2;width:100%;padding:24px 16px 32px}
+  .guide .switch{display:none}
+  .phone{order:1;flex:none;width:100%;height:100vh;height:100dvh;border:0;border-radius:0;box-shadow:none}
   .mobilebar{display:flex;align-items:center;gap:12px;background:var(--cobalt-deep);color:#fff;padding:8px 16px}
   .mobilebar b{font-family:var(--font-display);font-weight:400;font-size:20px}
   .mobilebar .switch{flex:1;max-width:220px;margin-left:auto}
   .mobilebar .switch button{padding:6px 0;font-size:13px}
 }
+@media (max-height:780px){ .map{min-height:100px} }   /* 낮은 화면: 지도를 줄여 하단 탭과 안내 문구가 밀리지 않게 */
+#app{overflow:hidden}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ---- v4 추가: 실제 지도, 출처 배지, 예시 표시 ---- */
@@ -259,6 +265,7 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
       </div>
     </div>
     <div id="app"></div>
+    <p class="disc">경성대·부경대역 상권 프로토타입 · 메뉴·가격은 웹 참고값(날짜 미상), 알레르기는 일반 조리법 기준 참고값, 예시 가게는 가상</p>
     <div class="toast" id="toast" role="status"></div>
   </main>
 </div>
@@ -791,6 +798,7 @@ document.addEventListener("click", e=>{
   const b = e.target.closest("[data-act]"); if(!b || b.disabled) return;
   if(b.closest(".leaflet-marker-icon")) return;               // 지도 핀은 marker 클릭 핸들러가 처리
   if(ACT[b.dataset.act](b.dataset.v, b) !== false) render();
+  if(b.closest(".guide") && matchMedia("(max-width:820px)").matches) window.scrollTo({top:0});   // 좁은 화면: 안내 패널은 앱 아래에 있으니 눌렀을 때 앱으로 올라가요
 });
 
 /* 실시간 숫자(예시 가게 한정): 화면을 다시 그리지 않고 숫자만 바꿉니다 */
