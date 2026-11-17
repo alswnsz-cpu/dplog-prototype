@@ -847,7 +847,7 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .toast{position:absolute;left:16px;right:16px;bottom:76px;background:var(--ink);color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.show{opacity:1}
 
-@media (max-width:820px){
+@media (max-width:820px), (max-height:520px){
   html,body{height:auto;min-height:100%}
   .stage{padding:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;height:auto}
   .guide{order:2;width:100%;padding:24px 16px 32px}
@@ -949,11 +949,15 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .fbc svg{position:absolute;left:0;top:0;width:100%;height:100%}
 .fbc .stn{z-index:4}
 .mapchip{position:absolute;right:8px;top:8px;z-index:1200;min-height:44px;padding:0 12px;border-radius:99px;background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(15,27,61,.28);font-size:12px;font-weight:700}
-.map .fbnote{z-index:1200;max-width:calc(100% - 16px)}
+.map .fbnote{z-index:1200;max-width:calc(100% - 16px);pointer-events:none}
+.pin .lbl{max-width:9em;overflow:hidden;text-overflow:ellipsis}
+.map .leaflet-control-attribution{pointer-events:none;font-size:10px;line-height:1.5}
+.map .leaflet-control-attribution a{pointer-events:auto}
+@media (hover:none){ .map .leaflet-control-zoom{display:none} }   /* 터치 화면은 두 손가락·두 번 탭으로 확대해요 */
 .map.fallback{background:#e9edf8}
 
 /* 안전 영역(노치·홈바), 낮은 화면 */
-@media (max-width:820px){
+@media (max-width:820px), (max-height:520px){
   .mobilebar{gap:8px;padding:6px 12px;padding-top:calc(6px + env(safe-area-inset-top,0px))}
   .mobilebar .switch{flex:1;max-width:none;margin-left:0}
   .mobilebar b{font-size:17px}
@@ -982,6 +986,36 @@ ol.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
   .demoline{min-height:30px;font-size:11.5px}
   .dctl button{height:40px}
   .top h2{font-size:20px}
+}
+
+/* QA 보정: 가로 모드·아주 낮은 화면·낮은 데스크톱 */
+@media (max-width:820px), (max-height:520px){
+  .phone{max-width:600px;margin-left:auto;margin-right:auto}
+  .guide{max-height:none;overflow:visible}
+}
+@media (max-height:620px){
+  #app{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .nav{position:sticky;bottom:0;z-index:6}
+  .map{flex:none;height:140px;min-height:140px}
+}
+@media (max-height:700px){
+  .demo-on .map{min-height:120px}
+  .demo-on .demoline,.demo-on .sheet .tags{display:none}
+  .demo-on #app{overflow-y:auto}
+  .demo-on .nav{position:sticky;bottom:0;z-index:6}
+}
+@media (min-width:821px) and (min-height:521px){
+  .guide{max-height:calc(100vh - 48px);overflow-y:auto}
+}
+@media (min-width:821px) and (max-height:900px){
+  .guide{gap:10px}
+  .brand{font-size:36px}
+  .steps button{padding:6px 12px}
+  .steps b + span{display:none}
+  .legend{gap:4px}
+}
+@media (min-width:821px) and (max-height:780px){
+  .legend,.guide .note{display:none}
 }
 
 </style>
@@ -1355,23 +1389,34 @@ const FB = (function(){
 const FBW = Math.round((FB.d-FB.c)*MLNG*KPM), FBH = Math.round((FB.b-FB.a)*MLAT*KPM);
 const fx = lng => Math.round((lng-FB.c)*MLNG*KPM), fy = lat => Math.round((FB.b-lat)*MLAT*KPM);
 const fbScroll = {x:0, y:0, init:false};
+/* 약식 지도 윤곽 (OSM 단순화, 개략): [위도, 경도] */
+const UNI_KSU = [[35.13769,129.09596],[35.13761,129.09558],[35.13813,129.09527],[35.13899,129.09552],[35.13883,129.09615],[35.13946,129.09654],[35.13946,129.0973],[35.14067,129.09729],[35.14067,129.09667],[35.14116,129.09622],[35.14224,129.09658],[35.14275,129.09643],[35.14308,129.09488],[35.14408,129.0955],[35.14438,129.09512],[35.14458,129.09535],[35.14402,129.09594],[35.14362,129.09579],[35.14338,129.09601],[35.14327,129.09694],[35.14259,129.09732],[35.14185,129.09862],[35.14157,129.09877],[35.14185,129.09909],[35.14266,129.09862],[35.14195,129.0995],[35.14154,129.09881],[35.14002,129.09906],[35.13955,129.09992],[35.1395,129.10114],[35.13912,129.10121],[35.13888,129.10118],[35.13836,129.10037],[35.13802,129.1003],[35.13774,129.09969],[35.13746,129.09988],[35.13737,129.09967],[35.13768,129.09944],[35.13731,129.09826],[35.13752,129.09806],[35.13841,129.09809],[35.13873,129.09755],[35.13858,129.0971],[35.13698,129.09762],[35.13676,129.09723],[35.1374,129.09657],[35.13782,129.09659]];
+const UNI_PKNU = [[35.13537,129.101],[35.13589,129.1066],[35.13705,129.10644],[35.13707,129.10668],[35.13591,129.10684],[35.13598,129.10858],[35.13499,129.11],[35.13086,129.10638],[35.13066,129.10452],[35.13114,129.1027],[35.13188,129.10141]];
+const ROAD_SUYEONG = [[35.1358,129.09684],[35.13708,129.09962],[35.13722,129.09993],[35.1395,129.10469],[35.13979,129.1053],[35.14015,129.10599]];
+const ROAD_YONGSO = [[35.13722,129.09993],[35.137,129.10011],[35.13619,129.10069],[35.13183,129.10125]];
+function poly(pts, label){
+  const xy = pts.map(function(p){ return fx(p[1]) + "," + fy(p[0]); }).join(" ");
+  let cx = 0, cy = 0; pts.forEach(function(p){ cx += fx(p[1]); cy += fy(p[0]); }); cx = Math.round(cx/pts.length); cy = Math.round(cy/pts.length);
+  return '<polygon points="' + xy + '" fill="#d3ecdc" stroke="#7fb89a" stroke-width="2" stroke-dasharray="6 5" stroke-linejoin="round"/>'
+    + '<text x="' + Math.max(70, Math.min(FBW-70, cx)) + '" y="' + Math.max(24, Math.min(FBH-24, cy)) + '" text-anchor="middle" font-size="15" font-weight="700" fill="#2f7a55">' + label + ' (개략)</text>';
+}
+function road(pts, w){
+  const xy = pts.map(function(p){ return fx(p[1]) + "," + fy(p[0]); }).join(" ");
+  return '<polyline points="' + xy + '" fill="none" stroke="#c3cce6" stroke-width="' + (w+6) + '" stroke-linecap="round" stroke-linejoin="round"/>'
+    + '<polyline points="' + xy + '" fill="none" stroke="#ffffff" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"/>';
+}
 let fbBg = "";
 function fbBackground(){
   if(fbBg) return fbBg;
   const sx = fx(STATION.lng), sy = fy(STATION.lat), r = Math.round(350*KPM);
-  const kx = fx(129.1030), kx2 = fx(129.1048), ky = fy(35.1346), ky2 = fy(35.1325);
   fbBg = '<svg width="'+FBW+'" height="'+FBH+'" viewBox="0 0 '+FBW+' '+FBH+'" aria-hidden="true" focusable="false">'
     + '<defs><pattern id="blk" width="84" height="74" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><rect x="7" y="7" width="70" height="60" rx="7" fill="#dde4f4"/></pattern></defs>'
     + '<rect width="'+FBW+'" height="'+FBH+'" fill="#eef1fa"/><rect width="'+FBW+'" height="'+FBH+'" fill="url(#blk)"/>'
-    // 대학 영역(개략): 경성대는 역 북쪽, 부경대는 남동쪽
-    + '<rect x="'+(sx-190)+'" y="-30" width="400" height="130" rx="20" fill="#d3ecdc" stroke="#7fb89a" stroke-width="2" stroke-dasharray="6 5"/>'
-    + '<text x="'+(sx+10)+'" y="48" text-anchor="middle" font-size="15" font-weight="700" fill="#2f7a55">경성대 방면 ↑ (개략)</text>'
-    + '<rect x="'+kx+'" y="'+ky+'" width="'+(kx2-kx)+'" height="'+(ky2-ky)+'" rx="20" fill="#d3ecdc" stroke="#7fb89a" stroke-width="2" stroke-dasharray="6 5"/>'
-    + '<text x="'+Math.round((kx+kx2)/2)+'" y="'+Math.round((ky+ky2)/2)+'" text-anchor="middle" font-size="15" font-weight="700" fill="#2f7a55">부경대 방면 ↘ (개략)</text>'
-    // 수영로(역을 지나는 큰길, 개략)
-    + '<line x1="'+(sx-1200)+'" y1="'+(sy+560)+'" x2="'+(sx+1200)+'" y2="'+(sy-560)+'" stroke="#c3cce6" stroke-width="26" stroke-linecap="round"/>'
-    + '<line x1="'+(sx-1200)+'" y1="'+(sy+560)+'" x2="'+(sx+1200)+'" y2="'+(sy-560)+'" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>'
-    + '<text transform="translate('+(sx+150)+' '+(sy-60)+') rotate(-25)" font-size="13" font-weight="700" fill="#7a85a8">수영로</text>'
+    // 대학 영역·큰길: OpenStreetMap 윤곽을 단순화한 개략 표시 (© OpenStreetMap contributors)
+    + poly(UNI_KSU, "경성대") + poly(UNI_PKNU, "부경대")
+    + road(ROAD_YONGSO, 18) + road(ROAD_SUYEONG, 26)
+    + '<text transform="translate('+fx(129.1022)+' '+(fy(35.13845)-4)+') rotate(-28)" font-size="13" font-weight="700" fill="#7a85a8">수영로</text>'
+    + '<text transform="translate('+(fx(129.1012)+6)+' '+fy(35.1345)+') rotate(90)" font-size="12" font-weight="700" fill="#7a85a8">용소로</text>'
     // 도보 5분(약 350m) 원과 역
     + '<circle cx="'+sx+'" cy="'+sy+'" r="'+r+'" fill="rgba(31,63,208,.05)" stroke="#1f3fd0" stroke-width="2" stroke-dasharray="8 7"/>'
     + '<text x="'+(sx+Math.round(r*0.62))+'" y="'+(sy+Math.round(r*0.76))+'" font-size="13" font-weight="700" fill="#1f3fd0">도보 5분 · 약 350m</text>'
@@ -1419,11 +1464,12 @@ function initMap(){
   mapHost.appendChild(lfDiv); mapHost.appendChild(fbDiv); mapHost.appendChild(noteEl); mapHost.appendChild(chipEl);
   if(window.L){
     try{
-      lmap = L.map(lfDiv, {zoomControl:true, attributionControl:true, zoomAnimation:!REDUCE, fadeAnimation:!REDUCE, markerZoomAnimation:!REDUCE}).setView([STATION.lat, STATION.lng], 17);
-      const tl = tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"© OpenStreetMap contributors"});
+      lmap = L.map(lfDiv, {zoomControl:true, attributionControl:false, zoomAnimation:!REDUCE, fadeAnimation:!REDUCE, markerZoomAnimation:!REDUCE}).setView([STATION.lat, STATION.lng], 17);
+      const tl = tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19});
       tl.on("tileload", function(){ tileState.ok++; });
       tl.on("tileerror", function(){ tileState.err++; if(tileState.err >= 5) toFallback("지도 타일을 불러오지 못해 약식 지도로 보여요"); });
       tl.on("load", function(){ if(tileState.ok === 0 && tileState.err > 0) toFallback("지도 타일을 불러오지 못해 약식 지도로 보여요"); });   // 보이는 타일이 전부 실패하면 바로 전환
+      L.control.attribution({prefix:false}).addAttribution('<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a>').addTo(lmap);
       L.circle([STATION.lat, STATION.lng], {radius:350, color:"#1f3fd0", weight:1.5, dashArray:"5 5", fillOpacity:.04}).addTo(lmap);
       L.marker([STATION.lat, STATION.lng], {interactive:false, icon:L.divIcon({className:"mk", iconSize:[0,0], html:'<span class="stn">경성대·부경대역 · 도보 5분</span>'})}).addTo(lmap);
       layer = L.layerGroup().addTo(lmap);
@@ -1443,7 +1489,7 @@ function syncMap(list){
   if(real){
     lmap.invalidateSize();
     if(!tilesOn && tileLayer){ tileLayer.addTo(lmap); tilesOn = true; }
-    if(!syncMap.done){ lmap.setView([STATION.lat, STATION.lng], 17, {animate:false}); syncMap.done = true; armTimer(); }   // 처음 붙을 때만 중심 맞춤
+    if(!syncMap.done){ lmap.setView([STATION.lat, STATION.lng], (mapHost.clientHeight && mapHost.clientHeight < 180) ? 16 : 17, {animate:false}); syncMap.done = true; armTimer(); }   // 낮은 화면에서는 한 단계 멀리서 보여 줘요   // 처음 붙을 때만 중심 맞춤
     layer.clearLayers();
     list.forEach(s => {
       const icon = L.divIcon({className:"mk", iconSize:[0,0], html:pinHTML(s)});
@@ -1541,9 +1587,9 @@ function vDetail(){
         ${after.map(({x,m})=>{ const d=x.items[0]; return `<span class="arrow">→<br>${m}분</span><button class="stop" data-act="detail" data-v="${x.id}"><i>${d?d.e:CE.sweet}</i><b>${d?koOf(d):esc(x.short||x.store)}</b><span>${esc(x.short||x.store)}</span></button>`; }).join("")}
       </div>
       <div class="timeline" aria-label="공강 90분 예시">
-        <span style="flex:5;background:#8b96bd">탐색</span><span style="flex:5;background:#aab3d3"></span>
-        <span style="flex:40;background:var(--cobalt)">식당 40분</span><span style="flex:5;background:#aab3d3"></span>
-        <span style="flex:30;background:var(--pin)">카페 30분</span><span style="flex:5;background:#8b96bd">복귀</span>
+        <span style="flex:9;background:#8b96bd">탐색</span><span style="flex:4;background:#aab3d3"></span>
+        <span style="flex:36;background:var(--cobalt)">식당 40분</span><span style="flex:4;background:#aab3d3"></span>
+        <span style="flex:28;background:var(--pin)">카페 30분</span><span style="flex:9;background:#8b96bd">복귀</span>
       </div>
       <p class="meta">도보 시간은 실제 위치 간 직선거리(분속 70m) 기준이에요. 식당에서 방문 인증을 하면 도보 3분 안 카페를 바로 추천해 드려요.</p>
     </div>` : ""}
@@ -1782,7 +1828,7 @@ function dataHTML(){
     + '<li><b>알레르기·재료·맵기</b>는 일반 조리법 기준 참고값이에요. 실제 가게와 다를 수 있어요.</li>'
     + '<li><b>예시 가게</b>와 사장님 화면의 점수·실시간 숫자는 <b>가상 데이터</b>예요.</li>'
     + '<li>아직 <b>사장님 확인 전</b>이에요. 현장 확인 전 데이터는 ‘확인 중’으로 표시돼요.</li>'
-    + '<li>지도 © OpenStreetMap contributors. 인터넷이 없으면 약식 지도로 보여요.</li></ul>'
+    + '<li>지도 © OpenStreetMap contributors. 인터넷이 없으면 약식 지도로 보여요. 약식 지도의 대학·큰길 윤곽은 OpenStreetMap을 단순화한 개략이에요.</li></ul>'
     + '<button class="btn" data-act="closeOvl" data-first>닫기</button></div>';
 }
 function openOverlay(kind){
@@ -1799,7 +1845,7 @@ function closeOverlay(){
 function focusGuide(){
   const g = $(".guide"); if(!g) return;
   g.classList.add("flash"); setTimeout(function(){ g.classList.remove("flash"); }, 2500);
-  if(window.matchMedia && matchMedia("(max-width:820px)").matches){ try{ g.scrollIntoView({behavior: REDUCE ? "auto" : "smooth", block:"start"}); }catch(e){ g.scrollIntoView(); } }
+  if(window.matchMedia && matchMedia("(max-width:820px), (max-height:520px)").matches){ try{ g.scrollIntoView({behavior: REDUCE ? "auto" : "smooth", block:"start"}); }catch(e){ g.scrollIntoView(); } }
   else { const b = g.querySelector(".steps button"); if(b && b.focus) b.focus(); }
 }
 function pickIntro(v){
@@ -1833,7 +1879,7 @@ function demoApply(){
 }
 function updateBar(){
   const bar = $("#demobar"); if(!bar) return;
-  bar.hidden = !demo.on;
+  bar.hidden = !demo.on; document.body.classList.toggle("demo-on", !!demo.on);   // 낮은 화면에서 시연 중 지도 높이를 지키는 데 써요
   if(!demo.on) return;
   const st = DEMO_STEPS[demo.n-1] || DEMO_STEPS[0];
   $("#dno").textContent = "①②③④⑤⑥".charAt(demo.n-1) + " " + st.cap;
@@ -1979,7 +2025,7 @@ document.addEventListener("click", e=>{
     const f = ACT[b.dataset.act]; if(!f) return;
     if(f(b.dataset.v, b) !== false) render();
   }catch(err){ recover("act:" + b.dataset.act, err); }
-  if(b.closest(".guide") && matchMedia("(max-width:820px)").matches) window.scrollTo({top:0});   // 좁은 화면: 안내 패널은 앱 아래에 있으니 눌렀을 때 앱으로 올라가요
+  if(b.closest(".guide") && matchMedia("(max-width:820px), (max-height:520px)").matches) window.scrollTo({top:0});   // 좁은 화면: 안내 패널은 앱 아래에 있으니 눌렀을 때 앱으로 올라가요
 });
 
 /* 실시간 숫자(예시 가게 한정): 화면을 다시 그리지 않고 숫자만 바꿉니다 */
